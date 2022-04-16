@@ -1,5 +1,5 @@
 async function myFunction(){
-  console.log("")
+  console.log("index.js load")
 }
 
 window.onload = async function(){
