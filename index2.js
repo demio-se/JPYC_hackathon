@@ -1,4 +1,5 @@
 async function myFunction(){
+  console.log("テスト");
   // A Web3Provider wraps a standard Web3 provider, which is
   // what MetaMask injects as window.ethereum into each page
   const provider = await new ethers.providers.Web3Provider(window.ethereum);
@@ -10,6 +11,7 @@ async function myFunction(){
 }
 
 async function myFunction2(){
+  console.log("テスト2");
   const provider = await new ethers.providers.Web3Provider(window.ethereum);
   const addresses = await etherum.request({method: 'eth_requestAccounts'});
   
