@@ -13,7 +13,7 @@ async function myFunction(){
 async function myFunction2(){
   console.log("テスト2");
   const provider = await new ethers.providers.Web3Provider(window.ethereum);
-  const addresses = await etherum.request({method: 'eth_requestAccounts'});
+  const addresses = await ethereum.request({method: 'eth_requestAccounts'});
   
   // The MetaMask plugin also allows signing transactions to
   // send ether and pay to change state within the blockchain.
@@ -27,7 +27,7 @@ async function myFunctionJPYC(){
   console.log("JPYC Start");
 
   const provider = await new ethers.providers.Web3Provider(window.ethereum);
-  const addresses = await etherum.request({method: 'eth_requestAccounts'});
+  const addresses = await ethereum.request({method: 'eth_requestAccounts'});
   
   // The MetaMask plugin also allows signing transactions to
   // send ether and pay to change state within the blockchain.
