@@ -1,3 +1,4 @@
+/*
 async function myFunction(){
   console.log("テスト");
   // A Web3Provider wraps a standard Web3 provider, which is
@@ -22,6 +23,7 @@ async function myFunction2(){
   
   alert(addresses[0]);
 }
+*/
 
 async function myFunctionJPYC(){
   console.log("JPYC Start");
