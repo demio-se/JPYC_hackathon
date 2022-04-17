@@ -7,7 +7,7 @@ async function myFunction(){
   // MetaMask requires requesting permission to connect users accounts
   const blocknumber = await provider.send("eth_requestAccounts", []);
   
-  alert(bolcknumber):
+  alert(bolcknumber);
 }
 
 async function myFunction2(){
