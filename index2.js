@@ -24,7 +24,6 @@ async function myFunction2(){
   alert(addresses[0]);
 }
 */
-
 async function myFunctionJPYC(){
   console.log("JPYC Start");
 
@@ -35,6 +34,10 @@ async function myFunctionJPYC(){
   // send ether and pay to change state within the blockchain.
   // For this, you need the account signer...
   const signer = await provider.getSigner();
+
+  console.log("Wallet address is");
+  console.log(addresses[0]);
+  alert(addresses[0]);
  
   // You can also use an ENS name for the contract address
   //JPYC Test Net address
@@ -66,9 +69,10 @@ async function myFunctionJPYC(){
   await JPYCContract.symbol();
   console.log(JPYCContract.symbol());
 
-  const balance = await JPYCContract.balanceOf(addresses[0]);
+  let balance = await JPYCContract.balanceOf(addresses[0]);
   console.log(JPYCContract.balanceOf(addresses[0]));
-
+  let balaceDecimal = ethers.utils.formatEther(balance);
+  console.log(balaceDecimal);
 
   console.log("JPYC End");
   
