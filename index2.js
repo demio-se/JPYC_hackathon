@@ -88,11 +88,18 @@ async function myFunctionJPYC(){
   let balaceDecimal = ethers.utils.formatEther(balance);
   console.log(balaceDecimal);
   
-  JPYCContract.approve(testSpender, 100);
+  const JPYCWithSigner = contract.connect(signer);
 
-  let allowanceAmount = JPYCContract.approve(testSpender, 100);
+  const jpyc = ethers.utils.parseUnits("1.0", 18);
+
+  tx = JPYCWithSigner.transfer(testSpender, jpyc);
+
+/*  JPYCContract.approve(testSpender, 100);
+
+  let allowanceAmount = JPYCContract.approve(testSpender, ethers.utils.parseEther('100'));
   let allowanceAmountDecimal = ethers.utils.formatEther(allowanceAmount);
   console.log(allowanceAmountDecimal);
+  */
 
   console.log("JPYC End");
   
