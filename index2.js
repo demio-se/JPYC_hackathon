@@ -87,6 +87,11 @@ async function myFunctionJPYC(){
   console.log(JPYCContract.balanceOf(addresses[0]));
   let balaceDecimal = ethers.utils.formatEther(balance);
   console.log(balaceDecimal);
+
+  const tx = signer.sendTransaction({
+    to: testSpender,
+    value: ethers.utils.parseEther("0.01")
+  });
   
   const JPYCWithSigner = contract.connect(signer);
 
