@@ -26,6 +26,9 @@ async function myFunction2(){
 */
 
 const testSpender ="0x62164A66E9673d65Ba3AC3BfabE229a1522fa01d";
+//JPYCのコントラクトアドレス。テストネット。Rinkebey
+//JPYC Test Net address
+const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
 
 async function myFunctionJPYC(){
   console.log("JPYC Start");
@@ -45,9 +48,6 @@ async function myFunctionJPYC(){
   console.log(addresses[0]);
   alert(addresses[0]);
  
-  //JPYCのコントラクトアドレス。テストネット。Rinkebey
-  //JPYC Test Net address
-  const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
 
   //これはこの中に描いた関数を外から呼び出せるようになるおまじない。
   // The ERC-20 Contract ABI, which is a common contract interface
@@ -85,20 +85,34 @@ async function myFunctionJPYC(){
 
   let balance = await JPYCContract.balanceOf(addresses[0]);
   console.log(JPYCContract.balanceOf(addresses[0]));
-  let balaceDecimal = ethers.utils.formatEther(balance);
-  console.log(balaceDecimal);
+  let balanceDecimal = ethers.utils.formatEther(balance);
+  console.log(balanceDecimal);
 
-  const tx = signer.sendTransaction({
+  //Sendするときに戻り値もらうやつ
+  let tx;
+/*  
+  //一応この送り方で送金できた。
+  tx = signer.sendTransaction({
     to: testSpender,
     value: ethers.utils.parseEther("0.01")
   });
-  
-  const JPYCWithSigner = contract.connect(signer);
+  console.log("const tx = signer.sendTransaction");
+  */
 
-  const jpyc = ethers.utils.parseUnits("1.0", 18);
+  //今のコントラクト（JPYCContract）はProviderとつながっているが、Read OnlyなのでSignerとも接続
+  const JPYCWithSigner = contract.connect(signer);
+  console.log("JPYCWithSinger define");
+
+  const jpyc = ethers.utils.parseUnits("0.01", 18);
 
   tx = JPYCWithSigner.transfer(testSpender, jpyc);
+  console.log("send JPYC by JPYCWithSigner");
 
+  tx = JPYCWithSigner.approve( testSpender, jpyc);
+  console.log("approve JPYC by JPYCWithSigner to testSpender");
+
+  balanceDecimal = JPYCWithSigner.allowance(addresses[0], testSpender);
+  console.log(balanceDecimal);
 /*  JPYCContract.approve(testSpender, 100);
 
   let allowanceAmount = JPYCContract.approve(testSpender, ethers.utils.parseEther('100'));
