@@ -63,6 +63,9 @@ async function myFunctionJPYC(){
     // Send some of your tokens to someone else
     "function transfer(address to, uint amount)",
 
+    // FromからToへtransferFrom.
+    "function transferFrom(address from, address to, uint amount)",
+
     // approveできるようにDaiに定義。
     "function approve(address spender, uint amount)",
 
@@ -103,17 +106,31 @@ async function myFunctionJPYC(){
   const JPYCWithSigner = JPYCContract.connect(signer);
   console.log("JPYCWithSinger define");
 
-  const jpyc = ethers.utils.parseUnits("0.01", 18);
+  const jpyc1 = ethers.utils.parseUnits("1", 18);
 
-  tx = JPYCWithSigner.transfer(testSpender, jpyc);
+  //metamaskからtestSpenderに送金
+  tx = JPYCWithSigner.transfer(testSpender, jpyc1);
   console.log("send JPYC by JPYCWithSigner");
 
-  tx = JPYCWithSigner.approve( testSpender, jpyc);
+  //metamaskのアドレスからtestSpenderにapprove。設定したJPYC使って良いよ
+  tx = JPYCWithSigner.approve( testSpender, jpyc1);
   console.log("approve JPYC by JPYCWithSigner to testSpender");
 
-  balanceDecimal = JPYCWithSigner.allowance(addresses[0], testSpender);
+  balance = JPYCWithSigner.allowance(addresses[0], testSpender);
+  balanceDecimal = ethers.utils.formatEther(balance);
+
+  console.log("allowance balance");
+  console.log(balance);
+  console.log("allowance balance Decimal");
   console.log(balanceDecimal);
-/*  JPYCContract.approve(testSpender, 100);
+
+/*
+  //送金した金額のうち、approveした金額をtransferFromで戻したかったけど、別のアドレスのメタマスクに接続しないと無理な気がする
+  const jpyc01 = ethers.utils.parseUnits("0.1", 18);
+  tx = JPYCWithSigner.transferFrom( addresses[0], testSpender, jpyc01);
+  console.log("approve JPYC by JPYCWithSigner to testSpender");
+*/
+  /*  JPYCContract.approve(testSpender, 100);
 
   let allowanceAmount = JPYCContract.approve(testSpender, ethers.utils.parseEther('100'));
   let allowanceAmountDecimal = ethers.utils.formatEther(allowanceAmount);
