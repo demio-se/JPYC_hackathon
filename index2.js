@@ -100,7 +100,7 @@ async function myFunctionJPYC(){
   */
 
   //今のコントラクト（JPYCContract）はProviderとつながっているが、Read OnlyなのでSignerとも接続
-  const JPYCWithSigner = contract.connect(signer);
+  const JPYCWithSigner = JPYCContract.connect(signer);
   console.log("JPYCWithSinger define");
 
   const jpyc = ethers.utils.parseUnits("0.01", 18);
