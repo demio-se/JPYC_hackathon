@@ -116,13 +116,17 @@ async function myFunctionJPYC(){
   tx = JPYCWithSigner.approve( testSpender, jpyc1);
   console.log("approve JPYC by JPYCWithSigner to testSpender");
 
+  /*
+  //allowanceがうまく動かないのでコメントアウト。
   balance = JPYCWithSigner.allowance(addresses[0], testSpender);
   balanceDecimal = ethers.utils.formatEther(balance);
+  
 
   console.log("allowance balance");
   console.log(balance);
   console.log("allowance balance Decimal");
   console.log(balanceDecimal);
+  */
 
 /*
   //送金した金額のうち、approveした金額をtransferFromで戻したかったけど、別のアドレスのメタマスクに接続しないと無理な気がする
