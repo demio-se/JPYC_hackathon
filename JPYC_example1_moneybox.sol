@@ -19,6 +19,9 @@ interface IERC20 {
     //追加で呼び出したい関数を指定しています
     function name() external view returns (string memory);
     function symbol() external view returns (string memory);
+
+   	function decimals() external view returns (uint256);
+
 }
 
 
@@ -51,6 +54,25 @@ contract JPYC_Example {
          //xDai NetworkのJPYC
          //jpyc = IERC20(0x417602f4fbdd471A431Ae29fB5fe0A681964C11b);  コメントアウト中
     } 
+
+    //構造体で支援先、支援者の情報をまとめる
+    struct Project {
+        string toTwID;    //支援される人。お金受け取る人
+        string fromTwID;   //支援する人。お金送る人
+        address fromAddress;   //支援する人のウォレットアドレス
+        uint256 amount;
+    }
+
+    Project[] public allProjects;
+    
+    //構造体Projectを放り込むmapping projectsの宣言
+    mapping (uint256 => Project) public projects;
+    
+    //引数をプッシュする。ガス発生
+    function createProject(string  memory argtoTwID, string memory argfromTwID, address  argfromAddress, uint256  argamount) public {
+         allProjects.push(Project(argtoTwID, argfromTwID, argfromAddress, argamount));
+         
+    }
 
     //名前を確認する関数です
     function getname() public view returns (string memory){
