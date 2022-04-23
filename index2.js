@@ -1,10 +1,10 @@
 const testSpender ="0x62164A66E9673d65Ba3AC3BfabE229a1522fa01d";  //テスト用メタマスクアカウント
-const testSmartContract = "0x1d21Ce85e85eD4485f2d08302F37c7b4196773a8"; //Rinkebeyのスマートコントラクト
+const testSmartContract = "0x9Be1D0115491C8e389b3CAEa2B0Ae5625139CCD6"; //Rinkebeyのスマートコントラクト
 
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/23 2220";
+let time ="22/04/23 2314";
 
 let provider;
 let providerSC;
@@ -139,13 +139,6 @@ async function myFunctionJPYC(){
 
   
   console.log("myFunctionJPYC End");
-
-  await CreateProject( 10, "toTwId1", "fromTwId1");  //応援ボタン押したとみなす
-  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
-  await projectFinish("toTwId1", 1);  //応援ボタン押したとみなす
-  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
-  await finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
-
 }
 
 //☆此処から先を応援するボタンを押したら実行したい。
@@ -180,7 +173,14 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId){
 window.onload = async function(){
   //myFunction();
   //myFunction2();
-  myFunctionJPYC(); //Providerとかの設定
+  await myFunctionJPYC(); //Providerとかの設定
+
+  await CreateProject( 10, "toTwId1", "fromTwId1");  //応援ボタン押したとみなす
+  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
+  await projectFinish("toTwId1", 0);  //応援ボタン押したとみなす
+  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
+  await finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
+
 }
 
 //☆期限が来たことを示す仮想ボタンを押したら実行したい。
@@ -192,9 +192,12 @@ async function finishedProjectAllowance( inputToTwId){
   let tx = await JpycSupportWithSinger.finishedProjectAllowance( inputToTwId);
   //let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
   console.log("total Supporting Amount is");
-  console.log( tx);
+  let decimalTotal =ethers.utils.formatUnits(tx, 18);
+  console.log(decimalTotal );
 
-  console.log("projectFinish End");
+  document.getElementById("finished").innerHTML
+    = `${inputToTwId}が勝手に応援されました!＜br＞支援総額${decimalTotal}円`;
+
   
 }
 
@@ -211,10 +214,8 @@ async function projectAllowance( inputToTwId){
   tx = await JpycSupportWithSinger.projectAllowance( inputToTwId);
   //let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
   console.log("total Supporting Amount is");
-  console.log( tx);
-
-  console.log("projectFinish End");
-  
+  console.log( ethers.utils.formatUnits(tx, 18));
+ 
 }
 
 //☆期限が来たことを示す仮想ボタンを押したら実行したい。
@@ -223,11 +224,9 @@ async function projectFinish( inputToTwId, targetAmount){
 
   //スマートコントラクトにJPYCをアプルーブ
   let tx = await JpycSupportWithSinger.projectFinish( inputToTwId, targetAmount);
-  console.log("Finish Project! total Support Amount is");
-  console.log( tx);
+  console.log("Finish Project!");
+  //console.log( tx);
 
-  console.log("projectFinish End");
-  
 }
 
 /*  
