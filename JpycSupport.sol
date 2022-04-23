@@ -212,19 +212,19 @@ contract JpycSupport {
         view
         returns (uint256)
     {
-        Project memory tempProject;
+        //Project memory tempProject;
         uint256 totalAllowance = 0;
         for (uint256 i = 0; i < allProjects.length; i++) {
-            tempProject = allProjects[i];
+            //tempProject = allProjects[i];
 
             //引数の支援先を探す。終わってないもののみ。
             if (
-                keccak256(abi.encodePacked(tempProject.toTwID)) ==
+                keccak256(abi.encodePacked(allProjects[i].toTwID)) ==
                 keccak256(abi.encodePacked(argtoTwID)) &&
-                !tempProject.isFinish
+                !allProjects[i].isFinish
             ) {
                 //総額を計算
-                totalAllowance += tempProject.amount;
+                totalAllowance += allProjects[i].amount;
             }
         }
         return totalAllowance;
@@ -269,6 +269,10 @@ contract JpycSupport {
         return jpycInterface.balanceOf(address(this)) / 10**18;
     }
 
+    //
+    function getAllProject() public view returns (Project[] memory) {
+        return allProjects;
+    }
     //スマートコントラクトからの送金を許可する関数です
     /*
     function approveJpycFromContract() public {
