@@ -4,7 +4,7 @@ const testSmartContract = "0x5c0Dd68085b6aea6d4E786dB4bBd38b0FdDe204E"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/24 0152";
+let time ="22/04/24 0200";
 
 let provider;
 let providerSC;
@@ -174,17 +174,12 @@ window.onload = async function(){
   let  tx = await JpycSupportContract2.jpycAmount();
   console.log("jpycAmount is");
   //console.log( ethers.utils.formatUnits(tx, 18));
-  console.log( tx);
-  //getAllProjectはボツ。
-  //tx = await JpycSupportContract2.getAllProject();
-  //console.log( tx);
-
-  console.log("projectAllowance");
-  tx = await JpycSupportContract2.projectAllowance("toTwId1");
-  console.log("tx");
-  console.log( tx);
-  console.log("decimal");
   let decimalTotal =ethers.utils.formatUnits(tx, 18);
+  console.log(decimalTotal );
+
+  console.log("projectAllowance is ");
+  tx = await JpycSupportContract2.projectAllowance("toTwId1");
+  decimalTotal =ethers.utils.formatUnits(tx, 18);
   console.log(decimalTotal );
   
   //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
