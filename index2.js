@@ -1,5 +1,5 @@
 const testSpender ="0x62164A66E9673d65Ba3AC3BfabE229a1522fa01d";  //テスト用メタマスクアカウント
-const testSmartContract = "0xA2153BE31d057D03132d2e1B3B7bc7EC0D9d2aA1"; //Rinkebeyのスマートコントラクト
+const testSmartContract = "0x173b9E77b0Fa5064028900614F08337acDF887ab"; //Rinkebeyのスマートコントラクト
 
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
@@ -10,18 +10,22 @@ async function myFunctionJPYC(){
 
   //よくわからないが、ブロックチェーンからデータを持ってきてくれるProviderを生成。
   const provider = await new ethers.providers.Web3Provider(window.ethereum);
+  const providerSC = await new ethers.providers.Web3Provider(window.ethereum);
 
   //これによりadresses[0]に接続したメタマスクの情報が入るっぽい
   const addresses = await ethereum.request({method: 'eth_requestAccounts'});
+  const addressesSC = await ethereum.request({method: 'eth_requestAccounts'});
   
 
   //書き込み役singerの設定。メタマスクとの紐付けのことっぽい。
   const signer = await provider.getSigner();
+  //書き込み役singerの設定。メタマスクとの紐付けのことっぽい。
+  const signerSC = await providerSC.getSigner();
 
   //この記載でメタマスクのアドレスと一致していることが確認できた。
   console.log("Wallet address is");
-  console.log(addresses[0]);
-  alert(addresses[0]);
+  console.log(addressesSC[0]);
+  alert(addressesSC[0]);
  
 
   //これはこの中に描いた関数を外から呼び出せるようになるおまじない。
@@ -52,6 +56,30 @@ async function myFunctionJPYC(){
     "event Transfer(address indexed from, address indexed to, uint amount)"
   ];
 
+  const JpycSupportAbi = [
+    // Some details about the token
+    "function name() view returns (string)",
+    "function symbol() view returns (string)",
+
+    // Get the account balance
+    "function balanceOf(address) view returns (uint)",
+
+    // Send some of your tokens to someone else
+    "function transfer(address to, uint amount)",
+
+    // FromからToへtransferFrom.
+    "function transferFrom(address from, address to, uint amount)",
+
+    // approveできるようにDaiに定義。
+    "function approve(address spender, uint amount)",
+
+    // allowance確認できるようにDaiに定義。
+    "function allowance(address owner, address spender)",
+
+    //これだけ関数じゃなくイベント。
+    // An event triggered whenever anyone transfers to someone else
+    "event Transfer(address indexed from, address indexed to, uint amount)"
+  ];
   // The Contract object
   const JPYCContract = await new ethers.Contract(JPYCAddress, JPYCAbi, provider);
   
