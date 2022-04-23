@@ -5,84 +5,113 @@ const testSmartContract = "0x173b9E77b0Fa5064028900614F08337acDF887ab"; //Rinkeb
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
 
+let provider;
+let providerSC;
+
+let addresses;
+let addressesSC;
+let signer;
+let signerSC;
+
+let JPYCContract;
+let JpycSupportContract;
+
+let JpycSupportWithSinger;
+let JPYCWithSigner;
+
+//これはこの中に描いた関数を外から呼び出せるようになるおまじない。
+// The ERC-20 Contract ABI, which is a common contract interface
+// for tokens (this is the Human-Readable ABI format)
+const JPYCAbi = [
+  // Some details about the token
+  "function name() view returns (string)",
+  "function symbol() view returns (string)",
+
+  // Get the account balance
+  "function balanceOf(address) view returns (uint)",
+
+  // Send some of your tokens to someone else
+  "function transfer(address to, uint amount)",
+
+  // FromからToへtransferFrom.
+  "function transferFrom(address from, address to, uint amount)",
+
+  // approveできるようにDaiに定義。
+  "function approve(address spender, uint amount)",
+
+  // allowance確認できるようにDaiに定義。
+  "function allowance(address owner, address spender)",
+
+  //これだけ関数じゃなくイベント。
+  // An event triggered whenever anyone transfers to someone else
+  "event Transfer(address indexed from, address indexed to, uint amount)"
+];
+
+const JpycSupportAbi = [
+  // Some details about the token
+  "function name() view returns (string)",
+  "function symbol() view returns (string)",
+
+  // Get the account balance
+  "function balanceOf(address) view returns (uint)",
+
+  // Send some of your tokens to someone else
+  "function transfer(address to, uint amount)",
+
+  // FromからToへtransferFrom.
+  "function transferFrom(address from, address to, uint amount)",
+
+  // approveできるように定義。
+  "function approve(address spender, uint amount)",
+
+  // allowance確認できるように定義。
+  "function allowance(address owner, address spender)",
+
+  //オリジナルの関数をAbiに定義
+  "function createProject(string  memory argtoTwID, string memory argfromTwID, address  argfromAddress, uint256  argamount)",
+
+  "function projectFinish(string memory argtoTwID, uint256 targetAmount)",
+
+  "function projectAllowance(string memory argtoTwID)",
+
+  "function finishedProjectAllowance(string memory argtoTwID)",
+
+  "function jpycAmount()",
+
+  //これだけ関数じゃなくイベント。用途はよくわからない
+  // An event triggered whenever anyone transfers to someone else
+  "event Transfer(address indexed from, address indexed to, uint amount)"
+];
+
 async function myFunctionJPYC(){
   console.log("JPYC Start");
 
   //よくわからないが、ブロックチェーンからデータを持ってきてくれるProviderを生成。
-  const provider = await new ethers.providers.Web3Provider(window.ethereum);
-  const providerSC = await new ethers.providers.Web3Provider(window.ethereum);
+  provider = await new ethers.providers.Web3Provider(window.ethereum);
+  providerSC = await new ethers.providers.Web3Provider(window.ethereum);
 
   //これによりadresses[0]に接続したメタマスクの情報が入るっぽい
-  const addresses = await ethereum.request({method: 'eth_requestAccounts'});
-  const addressesSC = await ethereum.request({method: 'eth_requestAccounts'});
+  addresses = await ethereum.request({method: 'eth_requestAccounts'});
+  addressesSC = await ethereum.request({method: 'eth_requestAccounts'});
   
 
   //書き込み役singerの設定。メタマスクとの紐付けのことっぽい。
-  const signer = await provider.getSigner();
+  signer = await provider.getSigner();
   //書き込み役singerの設定。メタマスクとの紐付けのことっぽい。
-  const signerSC = await providerSC.getSigner();
+  signerSC = await providerSC.getSigner();
 
   //この記載でメタマスクのアドレスと一致していることが確認できた。
   console.log("Wallet address is");
   console.log(addressesSC[0]);
-  alert(addressesSC[0]);
+  //alert(addressesSC[0]);
  
 
-  //これはこの中に描いた関数を外から呼び出せるようになるおまじない。
-  // The ERC-20 Contract ABI, which is a common contract interface
-  // for tokens (this is the Human-Readable ABI format)
-  const JPYCAbi = [
-    // Some details about the token
-    "function name() view returns (string)",
-    "function symbol() view returns (string)",
 
-    // Get the account balance
-    "function balanceOf(address) view returns (uint)",
-
-    // Send some of your tokens to someone else
-    "function transfer(address to, uint amount)",
-
-    // FromからToへtransferFrom.
-    "function transferFrom(address from, address to, uint amount)",
-
-    // approveできるようにDaiに定義。
-    "function approve(address spender, uint amount)",
-
-    // allowance確認できるようにDaiに定義。
-    "function allowance(address owner, address spender)",
-
-    //これだけ関数じゃなくイベント。
-    // An event triggered whenever anyone transfers to someone else
-    "event Transfer(address indexed from, address indexed to, uint amount)"
-  ];
-
-  const JpycSupportAbi = [
-    // Some details about the token
-    "function name() view returns (string)",
-    "function symbol() view returns (string)",
-
-    // Get the account balance
-    "function balanceOf(address) view returns (uint)",
-
-    // Send some of your tokens to someone else
-    "function transfer(address to, uint amount)",
-
-    // FromからToへtransferFrom.
-    "function transferFrom(address from, address to, uint amount)",
-
-    // approveできるようにDaiに定義。
-    "function approve(address spender, uint amount)",
-
-    // allowance確認できるようにDaiに定義。
-    "function allowance(address owner, address spender)",
-
-    //これだけ関数じゃなくイベント。
-    // An event triggered whenever anyone transfers to someone else
-    "event Transfer(address indexed from, address indexed to, uint amount)"
-  ];
   // The Contract object
-  const JPYCContract = await new ethers.Contract(JPYCAddress, JPYCAbi, provider);
+  JPYCContract = await new ethers.Contract(JPYCAddress, JPYCAbi, provider);
+  JpycSupportContract = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
   
+  /*
   await JPYCContract.name();
   console.log(JPYCContract.name());
 
@@ -93,24 +122,28 @@ async function myFunctionJPYC(){
   console.log(JPYCContract.balanceOf(addresses[0]));
   let balanceDecimal = ethers.utils.formatEther(balance);
   console.log(balanceDecimal);
+  */
 
   //Sendするときに戻り値もらうやつ
   let tx;
 
-  /*  
-  //一応この送り方で送金できた。
-  tx = signer.sendTransaction({
-    to: testSpender,
-    value: ethers.utils.parseEther("0.01")
-  });
-  console.log("const tx = signer.sendTransaction");
-  */
 
   //今のコントラクト（JPYCContract）はProviderとつながっているが、Read OnlyなのでSignerとも接続
-  const JPYCWithSigner = JPYCContract.connect(signer);
+  JPYCWithSigner = JPYCContract.connect(signer);
+  JpycSupportWithSinger = JpycSupportContract.connect(signerSC);
   console.log("JPYCWithSinger define");
 
-  const jpyc1 = ethers.utils.parseUnits("1", 18);
+  
+  console.log("myFunctionJPYC End");
+}
+
+//☆此処から先を応援するボタンを押したら実行したい。
+async function CreateProject(inputYen, inputToTwId, inputFromTwId){
+  
+
+  //☆ここの3つをテキスト入力や選択した応援される人（のTwitterID）から取得して書き換える
+  
+  const jpyc1 = ethers.utils.parseUnits(inputYen.toString(), 18);
 
   //metamaskからtestSpenderに送金。テスト完了したのでコメントアウト
   /*
@@ -122,10 +155,82 @@ async function myFunctionJPYC(){
   tx = JPYCWithSigner.approve( testSpender, jpyc1);
   console.log("approve JPYC by JPYCWithSigner to testSpender");
 */
-  //スマートコントラクトにアプルーブ
-  tx = JPYCWithSigner.approve( testSmartContract, jpyc1);
+  //スマートコントラクトのアドレスにJPYCをアプルーブ
+  let tx = JPYCWithSigner.approve( testSmartContract, jpyc1);
   console.log("approve JPYC by JPYCWithSigner to testSmartContract");
 
+  //スマートコントラクトのCreateProject関数を実行
+  tx = JpycSupportWithSinger.createProject( inputToTwId, inputFromTwId, addressesSC[0], jpyc1);
+  console.log("Create Project!");
+
+
+  console.log("myFunctionJPYC End");
+  
+}
+
+window.onload = async function(){
+  //myFunction();
+  //myFunction2();
+  myFunctionJPYC(); //Providerとかの設定
+  CreateProject(1, "toTwId1", "fromTwId1");  //応援ボタン押したとみなす
+  getProjectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
+  projectFinish("toTwId1");  //応援ボタン押したとみなす
+  getProjectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
+  finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
+
+}
+
+//☆期限が来たことを示す仮想ボタンを押したら実行したい。
+async function finishedProjectAllowance( inputToTwId){
+  
+  console.log("finishedProjectAllowance");
+
+  //スマートコントラクトにJPYCをアプルーブ
+  let tx = JpycSupportContract.finishedProjectAllowance( inputToTwId);
+  //let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
+  console.log("total Supporting Amount is");
+  console.log( tx);
+
+  console.log("projectFinish End");
+  
+}
+
+//☆期限が来たことを示す仮想ボタンを押したら実行したい。
+async function projectAllowance( inputToTwId){
+  
+  console.log("projectAllowance");
+
+  //スマートコントラクトにJPYCをアプルーブ
+  let tx = JpycSupportContract.projectAllowance( inputToTwId);
+  //let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
+  console.log("total Supporting Amount is");
+  console.log( tx);
+
+  console.log("projectFinish End");
+  
+}
+
+//☆期限が来たことを示す仮想ボタンを押したら実行したい。
+async function projectFinish( inputToTwId){
+  
+
+  //スマートコントラクトにJPYCをアプルーブ
+  let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
+  console.log("Finish Project! total Support Amount is");
+  console.log( tx);
+
+  console.log("projectFinish End");
+  
+}
+
+/*  
+  //一応この送り方で送金できた。
+  tx = signer.sendTransaction({
+    to: testSpender,
+    value: ethers.utils.parseEther("0.01")
+  });
+  console.log("const tx = signer.sendTransaction");
+  */
   /*
   //allowanceがうまく動かないのでコメントアウト。
   balance = JPYCWithSigner.allowance(addresses[0], testSpender);
@@ -150,17 +255,3 @@ async function myFunctionJPYC(){
   let allowanceAmountDecimal = ethers.utils.formatEther(allowanceAmount);
   console.log(allowanceAmountDecimal);
   */
-
-  console.log("JPYC End");
-  
-}
-
-window.onload = async function(){
-  //myFunction();
-  //myFunction2();
-  myFunctionJPYC();
-}
-
-//onloadじゃなくて、ボタン押下にしたい。それくらいは頑張れおれ
-
-
