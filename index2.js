@@ -1,5 +1,5 @@
 const testSpender ="0x62164A66E9673d65Ba3AC3BfabE229a1522fa01d";  //テスト用メタマスクアカウント
-const testSmartContract = "0x8952A41f42560DD04230aF292D7543B6dDB98A48"; //Rinkebeyのスマートコントラクト
+const testSmartContract = "0x683a7d8417d0a881Dbb9EcDB7c6C31e9c43005d4"; //Rinkebeyのスマートコントラクト
 
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
@@ -118,19 +118,6 @@ async function myFunctionJPYC(){
   const JPYCContract = await new ethers.Contract(JPYCAddress, JPYCAbi, provider);
   const JpycSupportContract = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
   
-  /*
-  await JPYCContract.name();
-  console.log(JPYCContract.name());
-
-  await JPYCContract.symbol();
-  console.log(JPYCContract.symbol());
-
-  let balance = await JPYCContract.balanceOf(addresses[0]);
-  console.log(JPYCContract.balanceOf(addresses[0]));
-  let balanceDecimal = ethers.utils.formatEther(balance);
-  console.log(balanceDecimal);
-  */
-
   //Sendするときに戻り値もらうやつ
   let tx;
 
@@ -192,8 +179,13 @@ window.onload = async function(){
   //tx = await JpycSupportContract2.getAllProject();
   //console.log( tx);
 
+  console.log("projectAllowance");
   tx = await JpycSupportContract2.projectAllowance("toTwId1");
+  console.log("tx");
   console.log( tx);
+  console.log("decimal");
+  let decimalTotal =ethers.utils.formatUnits(tx, 18);
+  console.log(decimalTotal );
   
   //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
   //await projectFinish("toTwId1", 0);  //応援ボタン押したとみなす
@@ -235,7 +227,7 @@ async function finishedProjectAllowance( inputToTwId){
   console.log("let");
   console.log(tx);
   console.log("decimals");
-    let decimalTotal =ethers.utils.formatUnits(tx, 18);
+  let decimalTotal =ethers.utils.formatUnits(tx, 18);
   console.log(decimalTotal );
 
   document.getElementById("finished").innerHTML

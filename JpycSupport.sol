@@ -97,44 +97,41 @@ contract JpycSupport {
         address argfromAddress,
         uint256 argamount
     ) external payable {
-        Project memory tempProject;
         uint256 thisAllowance = jpycInterface.allowance(
             argfromAddress,
             address(this)
         );
         for (uint256 i = 0; i < allProjects.length; i++) {
-            tempProject = allProjects[i];
-
             //toTwIDとfromAddressの同じ組み合わせで未終了があるか探す
             if (
-                keccak256(abi.encodePacked(tempProject.toTwID)) ==
+                keccak256(abi.encodePacked(allProjects[i].toTwID)) ==
                 keccak256(abi.encodePacked(argtoTwID)) &&
-                tempProject.fromAddress == argfromAddress &&
-                !tempProject.isFinish
+                allProjects[i].fromAddress == argfromAddress &&
+                !allProjects[i].isFinish
             ) {
                 //fromTwIDが違ったら後優先で上書き
                 if (
-                    keccak256(abi.encodePacked(tempProject.fromTwID)) ==
+                    keccak256(abi.encodePacked(allProjects[i].fromTwID)) ==
                     keccak256(abi.encodePacked(argfromTwID))
                 ) {
                     allProjects[i].fromTwID = argfromTwID;
                 }
 
-                if (tempProject.amount == thisAllowance) {
+                if (allProjects[i].amount == thisAllowance) {
                     //何もしない
-                } else if (tempProject.amount < thisAllowance) {
+                } else if (allProjects[i].amount < thisAllowance) {
                     //差額を貰う。
                     jpycInterface.transferFrom(
                         argfromAddress,
                         address(this),
-                        thisAllowance - tempProject.amount
+                        thisAllowance - allProjects[i].amount
                     );
                     allProjects[i].amount = thisAllowance;
                 } else {
                     //差額を返す
                     jpycInterface.transfer(
-                        tempProject.fromAddress,
-                        tempProject.amount - thisAllowance
+                        allProjects[i].fromAddress,
+                        allProjects[i].amount - thisAllowance
                     );
                     allProjects[i].amount = thisAllowance;
                 }
@@ -166,7 +163,6 @@ contract JpycSupport {
         payable
         returns (uint256)
     {
-        Project memory tempProject;
         uint256 totalAllowance = 0;
 
         totalAllowance = projectAllowance(argtoTwID);
@@ -174,13 +170,11 @@ contract JpycSupport {
         //支援総額が目標金額を超えていた。
         //無駄だけど関数内でProjectの配列作れなかったのでもう一回回してtransferFromを繰り返す
         for (uint256 i = 0; i < allProjects.length; i++) {
-            tempProject = allProjects[i];
-
             //引数の支援先を探す
             if (
-                keccak256(abi.encodePacked(tempProject.toTwID)) ==
+                keccak256(abi.encodePacked(allProjects[i].toTwID)) ==
                 keccak256(abi.encodePacked(argtoTwID)) &&
-                !tempProject.isFinish
+                !allProjects[i].isFinish
             ) {
                 //送金しててもしてなくてもプロジェクトから削除。配列の削除ができないので、isFinishを更新
                 allProjects[i].isFinish = true;
@@ -191,8 +185,8 @@ contract JpycSupport {
                 } else {
                     //目標金額に達しなかったので預かったお金を返す
                     jpycInterface.transfer(
-                        tempProject.fromAddress,
-                        tempProject.amount
+                        allProjects[i].fromAddress,
+                        allProjects[i].amount
                     );
                     allProjects[i].amount = 0;
                 }
@@ -212,11 +206,8 @@ contract JpycSupport {
         view
         returns (uint256)
     {
-        //Project memory tempProject;
         uint256 totalAllowance = 0;
         for (uint256 i = 0; i < allProjects.length; i++) {
-            //tempProject = allProjects[i];
-
             //引数の支援先を探す。終わってないもののみ。
             if (
                 keccak256(abi.encodePacked(allProjects[i].toTwID)) ==
@@ -236,19 +227,16 @@ contract JpycSupport {
         view
         returns (uint256)
     {
-        Project memory tempProject;
         uint256 totalAllowance = 0;
         for (uint256 i = 0; i < allProjects.length; i++) {
-            tempProject = allProjects[i];
-
             //引数の支援先を探す。終わったもののみ。
             if (
-                keccak256(abi.encodePacked(tempProject.toTwID)) ==
+                keccak256(abi.encodePacked(allProjects[i].toTwID)) ==
                 keccak256(abi.encodePacked(argtoTwID)) &&
-                tempProject.isFinish
+                allProjects[i].isFinish
             ) {
                 //総額を計算
-                totalAllowance += tempProject.amount;
+                totalAllowance += allProjects[i].amount;
             }
         }
         return totalAllowance;
