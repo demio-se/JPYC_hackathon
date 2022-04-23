@@ -4,7 +4,7 @@ const testSmartContract = "0xf4B40C6ccB472941F5c300359a5cB88D0Cb9f0BC"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/24 0029";
+let time ="22/04/24 0100";
 
 let provider;
 let providerSC;
@@ -72,16 +72,16 @@ const JpycSupportAbi = [
   "function createProject(string argtoTwID, string argfromTwID, address argfromAddress, uint argamount) payable",
 
   //指定したTwIDの現在の支援総額を返す関数
-  "function projectAllowance(string argtoTwID) returns (uint256)",
+  "function projectAllowance(string argtoTwID) veiw returns (uint256)",
   //期限になったときに呼んでほしい関数
   "function projectFinish(string argtoTwID, uint256 targetAmount) payable returns (uint256 )",
   //募集終了して実際に獲得した金額
-  "function finishedProjectAllowance(string  argtoTwID) returns (uint256)",
+  "function finishedProjectAllowance(string  argtoTwID) veiw returns (uint256)",
 
   //現在スマートコントラクトが所持している金額を表示
   "function jpycAmount() view returns (uint)",
   //応援者の全データを取得
-  "function getAllProject() view returns (Project[])",
+  //"function getAllProject() view returns (string[])",
 
   //これだけ関数じゃなくイベント。用途はよくわからない
   // An event triggered whenever anyone transfers to someone else
@@ -188,8 +188,13 @@ window.onload = async function(){
   console.log("jpycAmount is");
   //console.log( ethers.utils.formatUnits(tx, 18));
   console.log( tx);
-  tx = await JpycSupportContract2.getAllProject();
+  //getAllProjectはボツ。
+  //tx = await JpycSupportContract2.getAllProject();
+  //console.log( tx);
+
+  tx = await JpycSupportContract2.projectAllowance("toTwId1");
   console.log( tx);
+  
   //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
   //await projectFinish("toTwId1", 0);  //応援ボタン押したとみなす
   //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
