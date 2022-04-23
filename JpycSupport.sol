@@ -42,13 +42,14 @@ interface IERC20 {
     function decimals() external view returns (uint256);
 }
 
-contract JPYC_Example {
+contract JpycSupport {
     //上で定義したERC20規格を呼び出すための仕組み(インタフェース)です
     //IERC20 public jpyc;
 
     //貯金箱持ち主のアドレスです
     address owner;
     //JPYCのインターフェイス。JPYCのスマートコントラクトの関数を呼べるように。
+    //JPYC Test Net address 0xbD9c419003A36F187DAf1273FCe184e1341362C0
     IERC20 internal jpycInterface;
 
     constructor(address _jpyc_address) {
@@ -80,7 +81,7 @@ contract JPYC_Example {
         string toTwID; //支援される人。お金受け取る人
         string fromTwID; //支援する人。お金送る人
         address fromAddress; //支援する人のウォレットアドレス
-        uint256 amount; //支援額。allowanceで取れるので、要らないかも？
+        uint256 amount; //支援額。allowanceで取れるので、要らないかも？と思ったけど送金してもらうことになったので必要
         bool isFinish; //プロジェクトの終了。trueなら終了
     }
 
@@ -95,23 +96,48 @@ contract JPYC_Example {
         string memory argfromTwID,
         address argfromAddress,
         uint256 argamount
-    ) public {
+    ) external payable {
         Project memory tempProject;
+        uint256 thisAllowance = jpycInterface.allowance(
+            tempProject.fromAddress,
+            address(this)
+        );
         for (uint256 i = 0; i < allProjects.length; i++) {
             tempProject = allProjects[i];
 
-            //同じ組み合わせで未終了があるか探す
+            //toTwIDとfromAddressの同じ組み合わせで未終了があるか探す
             if (
                 keccak256(abi.encodePacked(tempProject.toTwID)) ==
                 keccak256(abi.encodePacked(argtoTwID)) &&
-                keccak256(abi.encodePacked(tempProject.fromTwID)) ==
-                keccak256(abi.encodePacked(argfromTwID)) &&
                 tempProject.fromAddress == argfromAddress &&
                 !tempProject.isFinish
             ) {
-                //同じ組み合わせなら金額だけ更新してプッシュしないで抜ける
-                allProjects[i].amount = argamount;
+                //fromTwIDが違ったら後優先で上書き
+                if (
+                    keccak256(abi.encodePacked(tempProject.fromTwID)) ==
+                    keccak256(abi.encodePacked(argfromTwID))
+                ) {
+                    allProjects[i].fromTwID = argfromTwID;
+                }
 
+                if (tempProject.amount == thisAllowance) {
+                    //何もしない
+                } else if (tempProject.amount < thisAllowance) {
+                    //差額を貰う。
+                    jpycInterface.transferFrom(
+                        tempProject.fromAddress,
+                        address(this),
+                        thisAllowance - tempProject.amount
+                    );
+                    allProjects[i].amount = thisAllowance;
+                } else {
+                    //差額を返す
+                    jpycInterface.transfer(
+                        tempProject.fromAddress,
+                        tempProject.amount - thisAllowance
+                    );
+                    allProjects[i].amount = thisAllowance;
+                }
                 return;
             }
         }
@@ -119,6 +145,7 @@ contract JPYC_Example {
         allProjects.push(
             Project(argtoTwID, argfromTwID, argfromAddress, argamount, false)
         );
+        jpycInterface.transfer(tempProject.fromAddress, thisAllowance);
 
         //approveは接続したメタマスクから呼び出すのが良さそうなのでコメントアウト
         //jpycInterface.approve(msg.sender, argamount);
@@ -136,21 +163,8 @@ contract JPYC_Example {
     {
         Project memory tempProject;
         uint256 totalAllowance = 0;
-        for (uint256 i = 0; i < allProjects.length; i++) {
-            tempProject = allProjects[i];
 
-            //引数の支援先を探す
-            if (
-                keccak256(abi.encodePacked(tempProject.toTwID)) ==
-                keccak256(abi.encodePacked(argtoTwID))
-            ) {
-                //JPYCでallowanceを呼び出して、トータルallowanceに加算
-                totalAllowance += jpycInterface.allowance(
-                    tempProject.fromAddress,
-                    address(this)
-                );
-            }
-        }
+        totalAllowance = projectAllowance(argtoTwID);
         //支援額が超えているか確認。
         //支援総額が目標金額を超えていた。
         //無駄だけど関数内でProjectの配列作れなかったのでもう一回回してtransferFromを繰り返す
@@ -163,20 +177,19 @@ contract JPYC_Example {
                 keccak256(abi.encodePacked(argtoTwID)) &&
                 !tempProject.isFinish
             ) {
-                //目標金額に達していたらスマートコントラクトに送金
-                if (totalAllowance >= targetAmount) {
-                    //JPYCでtransferFrom
-                    jpycInterface.transferFrom(
-                        tempProject.fromAddress,
-                        address(this),
-                        jpycInterface.allowance(
-                            tempProject.fromAddress,
-                            address(this)
-                        )
-                    );
-                }
                 //送金しててもしてなくてもプロジェクトから削除。配列の削除ができないので、isFinishを更新
                 allProjects[i].isFinish = true;
+                //目標金額に達しているか確認
+                if (totalAllowance >= targetAmount) {
+                    //Create時に送金してもらっているので目標金額達成している場合は何もしない
+                    //jpycInterface.transferFrom( tempProject.fromAddress , address(this), jpycInterface.allowance( tempProject.fromAddress , address(this)));
+                } else {
+                    //目標金額に達しなかったので預かったお金を返す
+                    jpycInterface.transfer(
+                        tempProject.fromAddress,
+                        tempProject.amount
+                    );
+                }
             }
         }
 
@@ -185,6 +198,54 @@ contract JPYC_Example {
         }
 
         return 0; //目標金額未満なので0をReturn
+    }
+
+    //現在の総支援額をreturn
+    function projectAllowance(string memory argtoTwID)
+        public
+        view
+        returns (uint256)
+    {
+        Project memory tempProject;
+        uint256 totalAllowance = 0;
+        for (uint256 i = 0; i < allProjects.length; i++) {
+            tempProject = allProjects[i];
+
+            //引数の支援先を探す。終わってないもののみ。
+            if (
+                keccak256(abi.encodePacked(tempProject.toTwID)) ==
+                keccak256(abi.encodePacked(argtoTwID)) &&
+                !tempProject.isFinish
+            ) {
+                //総額を計算
+                totalAllowance += tempProject.amount;
+            }
+        }
+        return totalAllowance;
+    }
+
+    //これまで実際に受けた支援額をreturn
+    function finishedProjectAllowance(string memory argtoTwID)
+        public
+        view
+        returns (uint256)
+    {
+        Project memory tempProject;
+        uint256 totalAllowance = 0;
+        for (uint256 i = 0; i < allProjects.length; i++) {
+            tempProject = allProjects[i];
+
+            //引数の支援先を探す。終わったもののみ。
+            if (
+                keccak256(abi.encodePacked(tempProject.toTwID)) ==
+                keccak256(abi.encodePacked(argtoTwID)) &&
+                tempProject.isFinish
+            ) {
+                //総額を計算
+                totalAllowance += tempProject.amount;
+            }
+        }
+        return totalAllowance;
     }
 
     //名前を確認する関数です
