@@ -4,7 +4,7 @@ const testSmartContract = "0x9Be1D0115491C8e389b3CAEa2B0Ae5625139CCD6"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/23 2314";
+let time ="22/04/23 2349";
 
 let provider;
 let providerSC;
@@ -167,6 +167,9 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId){
   await JpycSupportWithSinger.createProject( inputToTwId, inputFromTwId, addressesSC[0], jpyc1);
   console.log("Create Project!");
 
+  console.log("jpycAmount()");
+  tx = await JpycSupportWithSinger.jpycAmount();
+  console.log( tx);
   
 }
 
@@ -183,7 +186,7 @@ window.onload = async function(){
 
 }
 
-//☆期限が来たことを示す仮想ボタンを押したら実行したい。
+//☆最終的な支援総額
 async function finishedProjectAllowance( inputToTwId){
   
   console.log("finishedProjectAllowance");
@@ -192,7 +195,10 @@ async function finishedProjectAllowance( inputToTwId){
   let tx = await JpycSupportWithSinger.finishedProjectAllowance( inputToTwId);
   //let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
   console.log("total Supporting Amount is");
-  let decimalTotal =ethers.utils.formatUnits(tx, 18);
+  console.log("let");
+  console.log(tx);
+  console.log("decimals");
+    let decimalTotal =ethers.utils.formatUnits(tx, 18);
   console.log(decimalTotal );
 
   document.getElementById("finished").innerHTML
@@ -201,7 +207,7 @@ async function finishedProjectAllowance( inputToTwId){
   
 }
 
-//☆期限が来たことを示す仮想ボタンを押したら実行したい。
+//☆応援中の人の支援総額
 async function projectAllowance( inputToTwId){
   let tx;
   console.log("jpycAmount()");
