@@ -4,7 +4,7 @@ const testSmartContract = "0x173b9E77b0Fa5064028900614F08337acDF887ab"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/23 17:25";
+let time ="22/04/23 17:34";
 
 let provider;
 let providerSC;
@@ -153,7 +153,7 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId){
 
   console.log("Create Projectstart");
   const jpyc1 = ethers.utils.parseUnits(inputYen.toString(), 18);
-
+  console.log(inputYen.toString());
   //metamaskからtestSpenderに送金。テスト完了したのでコメントアウト
   /*
   tx = JPYCWithSigner.transfer(testSpender, jpyc1);
