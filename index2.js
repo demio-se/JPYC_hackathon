@@ -4,89 +4,104 @@ const testSmartContract = "0x173b9E77b0Fa5064028900614F08337acDF887ab"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/23 15:07";
+let time ="22/04/23 15:16";
+
+let provider;
+let providerSC;
+
+let addresses;
+let addressesSC;
+let signer;
+let signerSC;
+
+let JPYCContract;
+let JpycSupportContract;
+
+let JpycSupportWithSinger;
+let JPYCWithSigner;
+
+//これはこの中に描いた関数を外から呼び出せるようになるおまじない。
+// The ERC-20 Contract ABI, which is a common contract interface
+// for tokens (this is the Human-Readable ABI format)
+const JPYCAbi = [
+  // Some details about the token
+  "function name() view returns (string)",
+  "function symbol() view returns (string)",
+
+  // Get the account balance
+  "function balanceOf(address) view returns (uint)",
+
+  // Send some of your tokens to someone else
+  "function transfer(address to, uint amount)",
+
+  // FromからToへtransferFrom.
+  "function transferFrom(address from, address to, uint amount)",
+
+  // approveできるようにDaiに定義。
+  "function approve(address spender, uint amount)",
+
+  // allowance確認できるようにDaiに定義。
+  "function allowance(address owner, address spender)",
+
+  //これだけ関数じゃなくイベント。
+  // An event triggered whenever anyone transfers to someone else
+  "event Transfer(address indexed from, address indexed to, uint amount)"
+];
+
+const JpycSupportAbi = [
+  // Some details about the token
+  "function name() view returns (string)",
+  "function symbol() view returns (string)",
+
+  // Get the account balance
+  "function balanceOf(address) view returns (uint)",
+
+  // Send some of your tokens to someone else
+  "function transfer(address to, uint amount) returns(bool)",
+
+  // FromからToへtransferFrom.
+  "function transferFrom(address from, address to, uint amount) returns(bool)",
+
+  // approveできるように定義。
+  "function approve(address spender, uint amount) returns(bool)",
+
+  // allowance確認できるように定義。
+  "function allowance(address owner, address spender) view returns(bool)",
+
+  //オリジナルの関数をAbiに定義
+  "function createProject(string argtoTwID, string argfromTwID, address argfromAddress, uint argamount) payable returns(uint)",
+
+  "function projectFinish(string argtoTwID, uint targetAmount) payable returns(uint)",
+
+  "function projectAllowance(string argtoTwID) view returns(bool)",
+
+  "function finishedProjectAllowance(string argtoTwID) view returns(bool)",
+
+  "function jpycAmount()",
+
+  //これだけ関数じゃなくイベント。用途はよくわからない
+  // An event triggered whenever anyone transfers to someone else
+  "event Transfer(address indexed from, address indexed to, uint amount)"
+];
 
 
 async function myFunctionJPYC(){
   console.log(time);
   
-  //これはこの中に描いた関数を外から呼び出せるようになるおまじない。
-  // The ERC-20 Contract ABI, which is a common contract interface
-  // for tokens (this is the Human-Readable ABI format)
-  const JPYCAbi = [
-    // Some details about the token
-    "function name() view returns (string)",
-    "function symbol() view returns (string)",
-  
-    // Get the account balance
-    "function balanceOf(address) view returns (uint)",
-  
-    // Send some of your tokens to someone else
-    "function transfer(address to, uint amount)",
-  
-    // FromからToへtransferFrom.
-    "function transferFrom(address from, address to, uint amount)",
-  
-    // approveできるようにDaiに定義。
-    "function approve(address spender, uint amount)",
-  
-    // allowance確認できるようにDaiに定義。
-    "function allowance(address owner, address spender)",
-  
-    //これだけ関数じゃなくイベント。
-    // An event triggered whenever anyone transfers to someone else
-    "event Transfer(address indexed from, address indexed to, uint amount)"
-  ];
-  
-  const JpycSupportAbi = [
-    // Some details about the token
-    "function name() view returns (string)",
-    "function symbol() view returns (string)",
-  
-    // Get the account balance
-    "function balanceOf(address) view returns (uint)",
-  
-    // Send some of your tokens to someone else
-    "function transfer(address to, uint amount) returns(bool)",
-  
-    // FromからToへtransferFrom.
-    "function transferFrom(address from, address to, uint amount) returns(bool)",
-  
-    // approveできるように定義。
-    "function approve(address spender, uint amount) returns(bool)",
-  
-    // allowance確認できるように定義。
-    "function allowance(address owner, address spender) view returns(bool)",
-  
-    //オリジナルの関数をAbiに定義
-    "function createProject(string argtoTwID, string argfromTwID, address argfromAddress, uint argamount) payable returns(uint)",
-  
-    "function projectFinish(string argtoTwID, uint targetAmount) payable returns(uint)",
-  
-    "function projectAllowance(string argtoTwID) view returns(bool)",
-  
-    "function finishedProjectAllowance(string argtoTwID) view returns(bool)",
-  
-    "function jpycAmount()",
-  
-    //これだけ関数じゃなくイベント。用途はよくわからない
-    // An event triggered whenever anyone transfers to someone else
-    "event Transfer(address indexed from, address indexed to, uint amount)"
-  ];
-  
+
   //ブロックチェーンからデータを持ってきてくれるProviderを生成。
-  const provider = await new ethers.providers.Web3Provider(window.ethereum);
-  const providerSC = await new ethers.providers.Web3Provider(window.ethereum);
+  provider = await new ethers.providers.Web3Provider(window.ethereum);
+  providerSC = await new ethers.providers.Web3Provider(window.ethereum);
 
   //これによりadresses[0]に接続したメタマスクの情報が入るっぽい
-  const addresses = await ethereum.request({method: 'eth_requestAccounts'});
+  addresses = await ethereum.request({method: 'eth_requestAccounts'});
   //addressesSC = await ethereum.request({method: 'eth_requestAccounts'});
   
 
   //書き込み役singerの設定。メタマスクとの紐付けのことっぽい。
-  const signer = await provider.getSigner();
+  signer = await provider.getSigner();
   //書き込み役singerの設定。メタマスクとの紐付けのことっぽい。
-  const signerSC = await providerSC.getSigner();
+  signerSC = await providerSC.getSigner();
 
   //この記載でメタマスクのアドレスと一致していることが確認できた。
   console.log("Wallet address is");
@@ -117,8 +132,8 @@ async function myFunctionJPYC(){
 
 
   //今のコントラクト（JPYCContract）はProviderとつながっているが、Read OnlyなのでSignerとも接続
-  const JPYCWithSigner = JPYCContract.connect(signer);
-  const JpycSupportWithSinger = JpycSupportContract.connect(signerSC);
+  JPYCWithSigner = JPYCContract.connect(signer);
+  JpycSupportWithSinger = JpycSupportContract.connect(signerSC);
   console.log("JPYCWithSinger define");
 
   
