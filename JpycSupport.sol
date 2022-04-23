@@ -39,7 +39,7 @@ interface IERC20 {
 
     function symbol() external view returns (string memory);
 
-    function decimals() external view returns (uint256);
+    //function decimals() external view returns (uint256);
 }
 
 contract JpycSupport {
@@ -60,22 +60,6 @@ contract JpycSupport {
 
         //JPYCのスマートコントラクトのアドレスを入力してインターフェイスを作る。これでJPYCの関数呼べる
         jpycInterface = IERC20(_jpyc_address);
-
-        //Ethereum NetworkのJPYC
-        //jpyc = IERC20(0x2370f9d504c7a6e775bf6e14b3f12846b594cd53);
-
-        //Ethereumテストネット RinkebeyのJPYCのコントラクトアドレス
-        //jpyc = IERC20(0xbD9c419003A36F187DAf1273FCe184e1341362C0);
-
-        //なんでもトークンさんからのコメント。「コントラクトアドレスのパラメータ調整のうえ、テストネットJPYCを貯金箱にtransferするとよいと思います。」
-        //Polygon Network(matic)のJPYC
-        //jpyc = IERC20(0x6AE7Dfc73E0dDE2aa99ac063DcF7e8A63265108c);
-
-        //_mintが標準的なインターフェースに含まれてないと使えない。
-        //_mint( owner, initialSupply);
-
-        //xDai NetworkのJPYC
-        //jpyc = IERC20(0x417602f4fbdd471A431Ae29fB5fe0A681964C11b);  コメントアウト中
     }
 
     //構造体で支援先、支援者の情報をまとめる
@@ -271,6 +255,15 @@ contract JpycSupport {
     //スマートコントラクトに入っている総額を確認する関数です
     function jpycAmount() public view returns (uint256) {
         return jpycInterface.balanceOf(address(this));
+    }
+
+    //
+    function transfer(address recipient, uint256 amount)
+        internal
+        returns (bool)
+    {
+        jpycInterface.transfer(recipient, amount);
+        return true;
     }
 
     //

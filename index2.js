@@ -1,5 +1,5 @@
 const testSpender ="0x62164A66E9673d65Ba3AC3BfabE229a1522fa01d";  //テスト用メタマスクアカウント
-const testSmartContract = "0x8Ea07dB18459bf9778340125d5C2ffF5943279cD"; //Rinkebeyのスマートコントラクト
+const testSmartContract = "0xa89F0f8f91135BD071f4aFAF000010cB8CE75635"; //Rinkebeyのスマートコントラクト
 
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
@@ -179,9 +179,9 @@ window.onload = async function(){
 
   
   await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
-  await projectFinish("toTwId1", 0);  //応援ボタン押したとみなす
-  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
-  await finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
+  //await projectFinish("toTwId1", 0);  //応援ボタン押したとみなす
+  //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
+  //await finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
 
 }
 
