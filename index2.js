@@ -4,7 +4,7 @@ const testSmartContract = "0x1d21Ce85e85eD4485f2d08302F37c7b4196773a8"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/23 17:56";
+let time ="22/04/23 18:25";
 
 let provider;
 let providerSC;
@@ -73,9 +73,9 @@ const JpycSupportAbi = [
 
   "function projectFinish(string argtoTwID, uint targetAmount) payable returns(uint)",
 
-  "function projectAllowance(string argtoTwID) view returns(uint)",
+  "function projectAllowance(string argtoTwID) view returns (uint)",
 
-  "function finishedProjectAllowance(string argtoTwID) view returns(uint)",
+  "function finishedProjectAllowance(string argtoTwID) view returns (uint)",
 
   "function jpycAmount()",
 
@@ -140,9 +140,9 @@ async function myFunctionJPYC(){
   console.log("myFunctionJPYC End");
 
   await CreateProject( 10, "toTwId1", "fromTwId1");  //応援ボタン押したとみなす
-  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
+  //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
   await projectFinish("toTwId1");  //応援ボタン押したとみなす
-  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
+  //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
   await finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
 
 }
