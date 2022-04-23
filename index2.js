@@ -1,10 +1,10 @@
 const testSpender ="0x62164A66E9673d65Ba3AC3BfabE229a1522fa01d";  //テスト用メタマスクアカウント
-const testSmartContract = "0x9F1eCA2fC475719fbf5aEa55a29b3aF3a586b9ea"; //Rinkebeyのスマートコントラクト
+const testSmartContract = "0x8Ea07dB18459bf9778340125d5C2ffF5943279cD"; //Rinkebeyのスマートコントラクト
 
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/24 0205";
+let time ="22/04/24 0223";
 
 let provider;
 let providerSC;
@@ -177,15 +177,11 @@ window.onload = async function(){
   let decimalTotal =ethers.utils.formatUnits(tx, 18);
   console.log(decimalTotal );
 
-  console.log("projectAllowance is ");
-  tx = await JpycSupportContract2.projectAllowance("toTwId1");
-  decimalTotal =ethers.utils.formatUnits(tx, 18);
-  console.log(decimalTotal );
   
-  //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
-  //await projectFinish("toTwId1", 0);  //応援ボタン押したとみなす
-  //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
-  //await finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
+  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
+  await projectFinish("toTwId1", 0);  //応援ボタン押したとみなす
+  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
+  await finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
 
 }
 
@@ -193,7 +189,13 @@ window.onload = async function(){
 //☆応援中の人の支援総額。使い道ないかも。
 async function projectAllowance( inputToTwId){
   let tx;
-  console.log("projectAllowance");
+  let decimalTotal;
+  const JpycSupportContract2 = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
+  
+  console.log("projectAllowance is ");
+  tx = await JpycSupportContract2.projectAllowance(inputToTwId);
+  decimalTotal =ethers.utils.formatUnits(tx, 18);
+  console.log(decimalTotal );
 
 }
 
@@ -211,22 +213,17 @@ async function projectFinish( inputToTwId, targetAmount){
 //☆最終的な支援総額を表示。使い道ないかも。
 async function finishedProjectAllowance( inputToTwId){
   
-  console.log("finishedProjectAllowance");
-
-  //スマートコントラクトから情報を取得
+  let tx;
+  let decimalTotal;
   const JpycSupportContract2 = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
-  let tx = await JpycSupportContract2.finishedProjectAllowance( inputToTwId);
-  //let tx = await JpycSupportWithSinger.finishedProjectAllowance( inputToTwId);
-  //let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
-  console.log("total Supporting Amount is");
-  console.log("let");
-  console.log(tx);
-  console.log("decimals");
-  let decimalTotal =ethers.utils.formatUnits(tx, 18);
+  console.log("finishedProjectAllowance");
+  tx = await JpycSupportContract2.finishedProjectAllowance(inputToTwId);
+  decimalTotal =ethers.utils.formatUnits(tx, 18);
   console.log(decimalTotal );
 
+
   document.getElementById("finished").innerHTML
-    = `${inputToTwId}が勝手に応援されました!＜br＞支援総額${decimalTotal}円`;
+    = `${inputToTwId}が勝手に応援されました!<br>支援総額${decimalTotal}円`;
 
   
 }

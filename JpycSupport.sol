@@ -147,11 +147,21 @@ contract JpycSupport {
         }
         //ここまで来ているということは同じ組み合わせが無いので配列へ書き込み
         emit DebugLogEvent("CreateProject 5");
-        jpycInterface.transferFrom(argfromAddress, address(this), argamount);
+        jpycInterface.transferFrom(
+            argfromAddress,
+            address(this),
+            thisAllowance
+        );
         emit DebugLogEvent("CreateProject 6");
 
         allProjects.push(
-            Project(argtoTwID, argfromTwID, argfromAddress, argamount, false)
+            Project(
+                argtoTwID,
+                argfromTwID,
+                argfromAddress,
+                thisAllowance,
+                false
+            )
         );
         emit DebugLogEvent("CreateProject 7");
 
@@ -260,7 +270,7 @@ contract JpycSupport {
 
     //スマートコントラクトに入っている総額を確認する関数です
     function jpycAmount() public view returns (uint256) {
-        return jpycInterface.balanceOf(address(this)) / 10**18;
+        return jpycInterface.balanceOf(address(this));
     }
 
     //
