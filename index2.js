@@ -56,25 +56,25 @@ const JpycSupportAbi = [
   "function balanceOf(address) view returns (uint)",
 
   // Send some of your tokens to someone else
-  "function transfer(address to, uint amount)",
+  "function transfer(address to, uint amount) returns(bool)",
 
   // FromからToへtransferFrom.
-  "function transferFrom(address from, address to, uint amount)",
+  "function transferFrom(address from, address to, uint amount) returns(bool)",
 
   // approveできるように定義。
-  "function approve(address spender, uint amount)",
+  "function approve(address spender, uint amount) returns(bool)",
 
   // allowance確認できるように定義。
-  "function allowance(address owner, address spender)",
+  "function allowance(address owner, address spender) view returns(bool)",
 
   //オリジナルの関数をAbiに定義
-  "function createProject(string  memory argtoTwID, string memory argfromTwID, address  argfromAddress, uint256  argamount)",
+  "function createProject(string argtoTwID, string argfromTwID, address argfromAddress, uint argamount) payable returns(uint)",
 
-  "function projectFinish(string memory argtoTwID, uint256 targetAmount)",
+  "function projectFinish(string argtoTwID, uint targetAmount) payable returns(uint)",
 
-  "function projectAllowance(string memory argtoTwID)",
+  "function projectAllowance(string argtoTwID) view returns(bool)",
 
-  "function finishedProjectAllowance(string memory argtoTwID)",
+  "function finishedProjectAllowance(string argtoTwID) view returns(bool)",
 
   "function jpycAmount()",
 
@@ -84,15 +84,15 @@ const JpycSupportAbi = [
 ];
 
 async function myFunctionJPYC(){
-  console.log("JPYC Start 22/04/23 12:45");
+  console.log("JPYC Start 22/04/23 14:47");
 
-  //よくわからないが、ブロックチェーンからデータを持ってきてくれるProviderを生成。
+  //ブロックチェーンからデータを持ってきてくれるProviderを生成。
   provider = await new ethers.providers.Web3Provider(window.ethereum);
   providerSC = await new ethers.providers.Web3Provider(window.ethereum);
 
   //これによりadresses[0]に接続したメタマスクの情報が入るっぽい
   addresses = await ethereum.request({method: 'eth_requestAccounts'});
-  addressesSC = await ethereum.request({method: 'eth_requestAccounts'});
+  //addressesSC = await ethereum.request({method: 'eth_requestAccounts'});
   
 
   //書き込み役singerの設定。メタマスクとの紐付けのことっぽい。
@@ -102,7 +102,7 @@ async function myFunctionJPYC(){
 
   //この記載でメタマスクのアドレスと一致していることが確認できた。
   console.log("Wallet address is");
-  console.log(addressesSC[0]);
+  console.log(addresses[0]);
   //alert(addressesSC[0]);
  
 
@@ -142,8 +142,7 @@ async function myFunctionJPYC(){
 async function CreateProject(inputYen, inputToTwId, inputFromTwId){
   
 
-  //☆ここの3つをテキスト入力や選択した応援される人（のTwitterID）から取得して書き換える
-  
+  console.log("Create Projectstart");
   const jpyc1 = ethers.utils.parseUnits(inputYen.toString(), 18);
 
   //metamaskからtestSpenderに送金。テスト完了したのでコメントアウト
