@@ -72,11 +72,11 @@ const JpycSupportAbi = [
   "function createProject(string argtoTwID, string argfromTwID, address argfromAddress, uint argamount) payable",
 
   //指定したTwIDの現在の支援総額を返す関数
-  "function projectAllowance(string argtoTwID) view returns (uint256)",
+  "function projectAllowance(string argtoTwID) returns (uint256)",
   //期限になったときに呼んでほしい関数
   "function projectFinish(string argtoTwID, uint256 targetAmount) payable returns (uint256 )",
   //募集終了して実際に獲得した金額
-  "function finishedProjectAllowance(string  argtoTwID) view returns (uint256)",
+  "function finishedProjectAllowance(string  argtoTwID) returns (uint256)",
 
   "function jpycAmount()",
 
@@ -189,7 +189,7 @@ async function finishedProjectAllowance( inputToTwId){
   console.log("finishedProjectAllowance");
 
   //スマートコントラクトにJPYCをアプルーブ
-  let tx = await JpycSupportContract.finishedProjectAllowance( inputToTwId);
+  let tx = await JpycSupportWithSinger.finishedProjectAllowance( inputToTwId);
   //let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
   console.log("total Supporting Amount is");
   console.log( tx);
@@ -200,11 +200,15 @@ async function finishedProjectAllowance( inputToTwId){
 
 //☆期限が来たことを示す仮想ボタンを押したら実行したい。
 async function projectAllowance( inputToTwId){
-  
+  let tx;
+  console.log("jpycAmount()");
+  tx = await JpycSupportWithSinger.jpycAmount();
+  console.log( tx);
+
   console.log("projectAllowance");
 
   //スマートコントラクトにJPYCをアプルーブ
-  let tx = await JpycSupportContract.projectAllowance( inputToTwId);
+  tx = await JpycSupportWithSinger.projectAllowance( inputToTwId);
   //let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
   console.log("total Supporting Amount is");
   console.log( tx);
