@@ -4,7 +4,7 @@ const testSmartContract = "0x1d21Ce85e85eD4485f2d08302F37c7b4196773a8"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/23 18:30";
+let time ="22/04/23 18:33";
 
 let provider;
 let providerSC;
@@ -169,7 +169,8 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId){
   console.log("approve JPYC by JPYCWithSigner to testSmartContract");
 
   //スマートコントラクトのCreateProject関数を実行
-  tx = await JpycSupportWithSinger.createProject( inputToTwId, inputFromTwId, addressesSC[0], jpyc1);
+  //tx = await JpycSupportWithSinger.createProject( inputToTwId, inputFromTwId, addressesSC[0], jpyc1);
+  await JpycSupportWithSinger.createProject( inputToTwId, inputFromTwId, addressesSC[0], jpyc1);
   console.log("Create Project!");
 
   
