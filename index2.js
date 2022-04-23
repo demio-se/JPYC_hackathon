@@ -4,11 +4,11 @@ const testSmartContract = "0x173b9E77b0Fa5064028900614F08337acDF887ab"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-
+let time ="22/04/23 15:07";
 
 
 async function myFunctionJPYC(){
-  console.log("JPYC Start 22/04/23 14:47");
+  console.log(time);
   
   //これはこの中に描いた関数を外から呼び出せるようになるおまじない。
   // The ERC-20 Contract ABI, which is a common contract interface
@@ -124,11 +124,11 @@ async function myFunctionJPYC(){
   
   console.log("myFunctionJPYC End");
 
-  CreateProject(1, "toTwId1", "fromTwId1");  //応援ボタン押したとみなす
-  projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
-  projectFinish("toTwId1");  //応援ボタン押したとみなす
-  projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
-  finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
+  await CreateProject(1, "toTwId1", "fromTwId1");  //応援ボタン押したとみなす
+  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
+  await projectFinish("toTwId1");  //応援ボタン押したとみなす
+  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
+  await finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
 
 }
 
