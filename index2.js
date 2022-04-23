@@ -172,9 +172,9 @@ window.onload = async function(){
   //myFunction2();
   myFunctionJPYC(); //Providerとかの設定
   CreateProject(1, "toTwId1", "fromTwId1");  //応援ボタン押したとみなす
-  getProjectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
+  projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
   projectFinish("toTwId1");  //応援ボタン押したとみなす
-  getProjectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
+  projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
   finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
 
 }
