@@ -91,7 +91,7 @@ async function myFunctionJPYC(){
   providerSC = await new ethers.providers.Web3Provider(window.ethereum);
 
   //これによりadresses[0]に接続したメタマスクの情報が入るっぽい
-  //addresses = await ethereum.request({method: 'eth_requestAccounts'});
+  addresses = await ethereum.request({method: 'eth_requestAccounts'});
   addressesSC = await ethereum.request({method: 'eth_requestAccounts'});
   
 
