@@ -99,7 +99,7 @@ contract JpycSupport {
     ) external payable {
         Project memory tempProject;
         uint256 thisAllowance = jpycInterface.allowance(
-            tempProject.fromAddress,
+            argfromAddress,
             address(this)
         );
         for (uint256 i = 0; i < allProjects.length; i++) {
@@ -125,7 +125,7 @@ contract JpycSupport {
                 } else if (tempProject.amount < thisAllowance) {
                     //差額を貰う。
                     jpycInterface.transferFrom(
-                        tempProject.fromAddress,
+                        argfromAddress,
                         address(this),
                         thisAllowance - tempProject.amount
                     );
@@ -142,10 +142,20 @@ contract JpycSupport {
             }
         }
         //ここまで来ているということは同じ組み合わせが無いので配列へ書き込み
-        allProjects.push(
-            Project(argtoTwID, argfromTwID, argfromAddress, argamount, false)
+        jpycInterface.transferFrom(
+            argfromAddress,
+            address(this),
+            thisAllowance
         );
-        jpycInterface.transfer(tempProject.fromAddress, thisAllowance);
+        allProjects.push(
+            Project(
+                argtoTwID,
+                argfromTwID,
+                argfromAddress,
+                thisAllowance,
+                false
+            )
+        );
 
         //approveは接続したメタマスクから呼び出すのが良さそうなのでコメントアウト
         //jpycInterface.approve(msg.sender, argamount);
@@ -189,6 +199,7 @@ contract JpycSupport {
                         tempProject.fromAddress,
                         tempProject.amount
                     );
+                    allProjects[i].amount = 0;
                 }
             }
         }
