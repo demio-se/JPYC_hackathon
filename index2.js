@@ -152,8 +152,8 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId){
   
 
   console.log("Create Projectstart");
-  const jpyc1 = ethers.utils.parseUnits(string(inputYen), 18);
-  console.log(string(inputYen));
+  const jpyc1 = ethers.utils.parseUnits(String(inputYen), 18);
+  console.log(String(inputYen));
   //metamaskからtestSpenderに送金。テスト完了したのでコメントアウト
   /*
   tx = JPYCWithSigner.transfer(testSpender, jpyc1);
