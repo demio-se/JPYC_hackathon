@@ -69,12 +69,14 @@ const JpycSupportAbi = [
   //"function allowance(address owner, address spender) view returns(bool)",
 
   //オリジナルの関数をAbiに定義
-  "function createProject(string argtoTwID, string argfromTwID, address argfromAddress, uint argamount) payable returns(uint)",
+  "function createProject(string argtoTwID, string argfromTwID, address argfromAddress, uint argamount) payable",
 
   //指定したTwIDの現在の支援総額を返す関数
-  "function projectAllowance(string argtoTwID) view returns (uint)",
+  "function projectAllowance(string argtoTwID) view returns (uint256)",
   //期限になったときに呼んでほしい関数
-  "function projectFinish(string argtoTwID, uint256 targetAmount) payable returns (uint )",
+  "function projectFinish(string argtoTwID, uint256 targetAmount) payable returns (uint256 )",
+  //募集終了して実際に獲得した金額
+  "function finishedProjectAllowance(string  argtoTwID) view returns (uint256)",
 
   "function jpycAmount()",
 
