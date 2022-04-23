@@ -52,6 +52,8 @@ contract JpycSupport {
     //JPYC Test Net address 0xbD9c419003A36F187DAf1273FCe184e1341362C0
     IERC20 internal jpycInterface;
 
+    event DebugLogEvent(string);
+
     constructor(address _jpyc_address) {
         //スマートコントラクトの作成者を貯金箱の持ち主に設定します
         owner = msg.sender;
@@ -109,6 +111,8 @@ contract JpycSupport {
                 allProjects[i].fromAddress == argfromAddress &&
                 !allProjects[i].isFinish
             ) {
+                emit DebugLogEvent("CreateProject 1");
+
                 //fromTwIDが違ったら後優先で上書き
                 if (
                     keccak256(abi.encodePacked(allProjects[i].fromTwID)) ==
@@ -119,6 +123,7 @@ contract JpycSupport {
 
                 if (allProjects[i].amount == thisAllowance) {
                     //何もしない
+                    emit DebugLogEvent("CreateProject 2");
                 } else if (allProjects[i].amount < thisAllowance) {
                     //差額を貰う。
                     jpycInterface.transferFrom(
@@ -126,28 +131,29 @@ contract JpycSupport {
                         address(this),
                         thisAllowance - allProjects[i].amount
                     );
-                    allProjects[i].amount = thisAllowance;
+                    allProjects[i].amount = argamount;
+                    emit DebugLogEvent("CreateProject 3");
                 } else {
                     //差額を返す
                     jpycInterface.transfer(
                         allProjects[i].fromAddress,
                         allProjects[i].amount - thisAllowance
                     );
-                    allProjects[i].amount = thisAllowance;
+                    allProjects[i].amount = argamount;
+                    emit DebugLogEvent("CreateProject 4");
                 }
                 return;
             }
         }
         //ここまで来ているということは同じ組み合わせが無いので配列へ書き込み
-        jpycInterface.transferFrom(
-            argfromAddress,
-            address(this),
-            thisAllowance
-        );
+        emit DebugLogEvent("CreateProject 5");
+        jpycInterface.transferFrom(argfromAddress, address(this), argamount);
+        emit DebugLogEvent("CreateProject 6");
 
         allProjects.push(
             Project(argtoTwID, argfromTwID, argfromAddress, argamount, false)
         );
+        emit DebugLogEvent("CreateProject 7");
 
         //approveは接続したメタマスクから呼び出すのが良さそうなのでコメントアウト
         //jpycInterface.approve(msg.sender, argamount);

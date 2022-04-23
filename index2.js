@@ -4,7 +4,7 @@ const testSmartContract = "0x5c0Dd68085b6aea6d4E786dB4bBd38b0FdDe204E"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/24 0134";
+let time ="22/04/24 0152";
 
 let provider;
 let providerSC;
