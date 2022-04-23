@@ -1,10 +1,10 @@
 const testSpender ="0x62164A66E9673d65Ba3AC3BfabE229a1522fa01d";  //テスト用メタマスクアカウント
-const testSmartContract = "0x9Be1D0115491C8e389b3CAEa2B0Ae5625139CCD6"; //Rinkebeyのスマートコントラクト
+const testSmartContract = "0xf4B40C6ccB472941F5c300359a5cB88D0Cb9f0BC"; //Rinkebeyのスマートコントラクト
 
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/24 0015";
+let time ="22/04/24 0027";
 
 let provider;
 let providerSC;
@@ -78,7 +78,10 @@ const JpycSupportAbi = [
   //募集終了して実際に獲得した金額
   "function finishedProjectAllowance(string  argtoTwID) returns (uint256)",
 
-  "function jpycAmount()",
+  //現在スマートコントラクトが所持している金額を表示
+  "function jpycAmount() view returns (uint)",
+  //応援者の全データを取得
+  "function getAllProject() view returns (Project[])",
 
   //これだけ関数じゃなくイベント。用途はよくわからない
   // An event triggered whenever anyone transfers to someone else
@@ -169,7 +172,7 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId){
 
   //console.log("jpycAmount()");
   //tx = await JpycSupportWithSinger.jpycAmount();
-  console.log( tx);
+  //console.log( tx);
   
 }
 
