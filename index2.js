@@ -188,7 +188,8 @@ window.onload = async function(){
   console.log("jpycAmount is");
   //console.log( ethers.utils.formatUnits(tx, 18));
   console.log( tx);
-  
+  tx = await JpycSupportContract2.getAllProject();
+  console.log( tx);
   //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
   //await projectFinish("toTwId1", 0);  //応援ボタン押したとみなす
   //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
