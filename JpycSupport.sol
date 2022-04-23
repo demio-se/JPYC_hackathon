@@ -88,7 +88,7 @@ contract JpycSupport {
     Project[] public allProjects;
 
     //構造体Projectを放り込むmapping projectsの宣言
-    mapping(uint256 => Project) public projects;
+    //mapping (uint256 => Project) public projects;
 
     //引数をプッシュする。ガス発生
     function createProject(
@@ -147,14 +147,9 @@ contract JpycSupport {
             address(this),
             thisAllowance
         );
+
         allProjects.push(
-            Project(
-                argtoTwID,
-                argfromTwID,
-                argfromAddress,
-                thisAllowance,
-                false
-            )
+            Project(argtoTwID, argfromTwID, argfromAddress, argamount, false)
         );
 
         //approveは接続したメタマスクから呼び出すのが良さそうなのでコメントアウト
