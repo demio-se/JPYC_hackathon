@@ -1,10 +1,10 @@
 const testSpender ="0x62164A66E9673d65Ba3AC3BfabE229a1522fa01d";  //テスト用メタマスクアカウント
-const testSmartContract = "0x5c0Dd68085b6aea6d4E786dB4bBd38b0FdDe204E"; //Rinkebeyのスマートコントラクト
+const testSmartContract = "0x9F1eCA2fC475719fbf5aEa55a29b3aF3a586b9ea"; //Rinkebeyのスマートコントラクト
 
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/24 0200";
+let time ="22/04/24 0205";
 
 let provider;
 let providerSC;
