@@ -1,5 +1,5 @@
 const testSpender ="0x62164A66E9673d65Ba3AC3BfabE229a1522fa01d";  //テスト用メタマスクアカウント
-const testSmartContract = "0xd74e69E6740716A3CfBcbe8Ae9D7D2F647CcC9D0"; //Rinkebeyのスマートコントラクト
+const testSmartContract = "0xA2153BE31d057D03132d2e1B3B7bc7EC0D9d2aA1"; //Rinkebeyのスマートコントラクト
 
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
