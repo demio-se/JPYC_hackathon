@@ -4,7 +4,7 @@ const testSmartContract = "0x8Ea07dB18459bf9778340125d5C2ffF5943279cD"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/24 0223";
+let time ="22/04/24 0229";
 
 let provider;
 let providerSC;
@@ -222,9 +222,9 @@ async function finishedProjectAllowance( inputToTwId){
   console.log(decimalTotal );
 
 
-  document.getElementById("finished").innerHTML
+  /*document.getElementById("finished").innerHTML
     = `${inputToTwId}が勝手に応援されました!<br>支援総額${decimalTotal}円`;
-
+*/
   
 }
 /*  
