@@ -4,7 +4,7 @@ const testSmartContract = "0xf4B40C6ccB472941F5c300359a5cB88D0Cb9f0BC"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/24 0100";
+let time ="22/04/24 0104";
 
 let provider;
 let providerSC;
@@ -72,11 +72,11 @@ const JpycSupportAbi = [
   "function createProject(string argtoTwID, string argfromTwID, address argfromAddress, uint argamount) payable",
 
   //指定したTwIDの現在の支援総額を返す関数
-  "function projectAllowance(string argtoTwID) veiw returns (uint256)",
+  "function projectAllowance(string argtoTwID) view returns (uint256)",
   //期限になったときに呼んでほしい関数
   "function projectFinish(string argtoTwID, uint256 targetAmount) payable returns (uint256 )",
   //募集終了して実際に獲得した金額
-  "function finishedProjectAllowance(string  argtoTwID) veiw returns (uint256)",
+  "function finishedProjectAllowance(string  argtoTwID) view returns (uint256)",
 
   //現在スマートコントラクトが所持している金額を表示
   "function jpycAmount() view returns (uint)",
