@@ -4,7 +4,7 @@ const testSmartContract = "0x173b9E77b0Fa5064028900614F08337acDF887ab"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/23 17:12";
+let time ="22/04/23 17:25";
 
 let provider;
 let providerSC;
@@ -165,11 +165,11 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId){
   console.log("approve JPYC by JPYCWithSigner to testSpender");
 */
   //スマートコントラクトのアドレスにJPYCをアプルーブ
-  let tx = JPYCWithSigner.approve( testSmartContract, jpyc1);
+  let tx = await JPYCWithSigner.approve( testSmartContract, jpyc1);
   console.log("approve JPYC by JPYCWithSigner to testSmartContract");
 
   //スマートコントラクトのCreateProject関数を実行
-  tx = JpycSupportWithSinger.createProject( inputToTwId, inputFromTwId, addressesSC[0], jpyc1);
+  tx = await JpycSupportWithSinger.createProject( inputToTwId, inputFromTwId, addressesSC[0], jpyc1);
   console.log("Create Project!");
 
   
@@ -187,7 +187,7 @@ async function finishedProjectAllowance( inputToTwId){
   console.log("finishedProjectAllowance");
 
   //スマートコントラクトにJPYCをアプルーブ
-  let tx = JpycSupportContract.finishedProjectAllowance( inputToTwId);
+  let tx = await JpycSupportContract.finishedProjectAllowance( inputToTwId);
   //let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
   console.log("total Supporting Amount is");
   console.log( tx);
@@ -202,7 +202,7 @@ async function projectAllowance( inputToTwId){
   console.log("projectAllowance");
 
   //スマートコントラクトにJPYCをアプルーブ
-  let tx = JpycSupportContract.projectAllowance( inputToTwId);
+  let tx = await JpycSupportContract.projectAllowance( inputToTwId);
   //let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
   console.log("total Supporting Amount is");
   console.log( tx);
@@ -216,7 +216,7 @@ async function projectFinish( inputToTwId){
   
 
   //スマートコントラクトにJPYCをアプルーブ
-  let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
+  let tx = await JpycSupportWithSinger.projectFinish( inputToTwId);
   console.log("Finish Project! total Support Amount is");
   console.log( tx);
 
