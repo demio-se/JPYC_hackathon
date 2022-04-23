@@ -84,7 +84,7 @@ const JpycSupportAbi = [
 ];
 
 async function myFunctionJPYC(){
-  console.log("JPYC Start");
+  console.log("JPYC Start 22/04/23 12:45");
 
   //よくわからないが、ブロックチェーンからデータを持ってきてくれるProviderを生成。
   provider = await new ethers.providers.Web3Provider(window.ethereum);
