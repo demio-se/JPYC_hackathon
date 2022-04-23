@@ -4,7 +4,7 @@ const testSmartContract = "0x9Be1D0115491C8e389b3CAEa2B0Ae5625139CCD6"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/24 0000";
+let time ="22/04/24 0015";
 
 let provider;
 let providerSC;
@@ -179,14 +179,40 @@ window.onload = async function(){
   await myFunctionJPYC(); //Providerとかの設定
 
   await CreateProject( 10, "toTwId1", "fromTwId1");  //応援ボタン押したとみなす
-  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
-  await projectFinish("toTwId1", 0);  //応援ボタン押したとみなす
-  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
-  await finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
+  //スマートコントラクトから情報を取得
+  const JpycSupportContract2 = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
+  let  tx = await JpycSupportContract2.jpycAmount();
+  console.log("jpycAmount is");
+  //console.log( ethers.utils.formatUnits(tx, 18));
+  console.log( tx);
+  
+  //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
+  //await projectFinish("toTwId1", 0);  //応援ボタン押したとみなす
+  //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
+  //await finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
 
 }
 
-//☆最終的な支援総額
+
+//☆応援中の人の支援総額。使い道ないかも。
+async function projectAllowance( inputToTwId){
+  let tx;
+  console.log("projectAllowance");
+
+}
+
+//☆期限が来たことを示す仮想ボタンを押したら実行したい。
+async function projectFinish( inputToTwId, targetAmount){
+  
+  //期限が来たので、プロジェクト終了をスマートコントラクトに通知
+  let tx = await JpycSupportWithSinger.projectFinish( inputToTwId, targetAmount);
+  console.log("Finish Project!");
+  //console.log( tx);
+
+}
+
+
+//☆最終的な支援総額を表示。使い道ないかも。
 async function finishedProjectAllowance( inputToTwId){
   
   console.log("finishedProjectAllowance");
@@ -208,33 +234,6 @@ async function finishedProjectAllowance( inputToTwId){
 
   
 }
-
-//☆応援中の人の支援総額
-async function projectAllowance( inputToTwId){
-  let tx;
-  console.log("projectAllowance");
-
-  //スマートコントラクトから情報を取得
-  const JpycSupportContract2 = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
-  tx = await JpycSupportContract2.projectAllowance( inputToTwId);
-  //tx = await JpycSupportWithSinger.projectAllowance( inputToTwId);
-  //let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
-  console.log("total Supporting Amount is");
-  //console.log( ethers.utils.formatUnits(tx, 18));
-  console.log( tx);
-}
-
-//☆期限が来たことを示す仮想ボタンを押したら実行したい。
-async function projectFinish( inputToTwId, targetAmount){
-  
-
-  //スマートコントラクトにJPYCをアプルーブ
-  let tx = await JpycSupportWithSinger.projectFinish( inputToTwId, targetAmount);
-  console.log("Finish Project!");
-  //console.log( tx);
-
-}
-
 /*  
   //一応この送り方で送金できた。
   tx = signer.sendTransaction({
