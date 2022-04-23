@@ -4,7 +4,7 @@ const testSmartContract = "0x9Be1D0115491C8e389b3CAEa2B0Ae5625139CCD6"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/23 2349";
+let time ="22/04/24 0000";
 
 let provider;
 let providerSC;
@@ -167,8 +167,8 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId){
   await JpycSupportWithSinger.createProject( inputToTwId, inputFromTwId, addressesSC[0], jpyc1);
   console.log("Create Project!");
 
-  console.log("jpycAmount()");
-  tx = await JpycSupportWithSinger.jpycAmount();
+  //console.log("jpycAmount()");
+  //tx = await JpycSupportWithSinger.jpycAmount();
   console.log( tx);
   
 }
@@ -191,8 +191,10 @@ async function finishedProjectAllowance( inputToTwId){
   
   console.log("finishedProjectAllowance");
 
-  //スマートコントラクトにJPYCをアプルーブ
-  let tx = await JpycSupportWithSinger.finishedProjectAllowance( inputToTwId);
+  //スマートコントラクトから情報を取得
+  const JpycSupportContract2 = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
+  let tx = await JpycSupportContract2.finishedProjectAllowance( inputToTwId);
+  //let tx = await JpycSupportWithSinger.finishedProjectAllowance( inputToTwId);
   //let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
   console.log("total Supporting Amount is");
   console.log("let");
@@ -210,18 +212,16 @@ async function finishedProjectAllowance( inputToTwId){
 //☆応援中の人の支援総額
 async function projectAllowance( inputToTwId){
   let tx;
-  console.log("jpycAmount()");
-  tx = await JpycSupportWithSinger.jpycAmount();
-  console.log( tx);
-
   console.log("projectAllowance");
 
-  //スマートコントラクトにJPYCをアプルーブ
-  tx = await JpycSupportWithSinger.projectAllowance( inputToTwId);
+  //スマートコントラクトから情報を取得
+  const JpycSupportContract2 = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
+  tx = await JpycSupportContract2.projectAllowance( inputToTwId);
+  //tx = await JpycSupportWithSinger.projectAllowance( inputToTwId);
   //let tx = JpycSupportWithSinger.projectFinish( inputToTwId);
   console.log("total Supporting Amount is");
-  console.log( ethers.utils.formatUnits(tx, 18));
- 
+  //console.log( ethers.utils.formatUnits(tx, 18));
+  console.log( tx);
 }
 
 //☆期限が来たことを示す仮想ボタンを押したら実行したい。
