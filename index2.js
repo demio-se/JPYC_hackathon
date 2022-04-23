@@ -4,7 +4,7 @@ const testSmartContract = "0x173b9E77b0Fa5064028900614F08337acDF887ab"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/23 15:16";
+let time ="22/04/23 15:21";
 
 let provider;
 let providerSC;
@@ -95,7 +95,7 @@ async function myFunctionJPYC(){
 
   //これによりadresses[0]に接続したメタマスクの情報が入るっぽい
   addresses = await ethereum.request({method: 'eth_requestAccounts'});
-  //addressesSC = await ethereum.request({method: 'eth_requestAccounts'});
+  addressesSC = await ethereum.request({method: 'eth_requestAccounts'});
   
 
   //書き込み役singerの設定。メタマスクとの紐付けのことっぽい。
