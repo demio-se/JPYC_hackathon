@@ -71,7 +71,6 @@ const JpycSupportAbi = [
   //オリジナルの関数をAbiに定義
   "function createProject(string argtoTwID, string argfromTwID, address argfromAddress, uint argamount) payable returns(uint)",
 
-  "function projectFinish(string argtoTwID, uint targetAmount) payable returns(uint)",
   //指定したTwIDの現在の支援総額を返す関数
   "function projectAllowance(string argtoTwID) view returns (uint)",
   //期限になったときに呼んでほしい関数
@@ -141,9 +140,9 @@ async function myFunctionJPYC(){
 
   await CreateProject( 10, "toTwId1", "fromTwId1");  //応援ボタン押したとみなす
   await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
-  await projectFinish("toTwId1");  //応援ボタン押したとみなす
+  await projectFinish("toTwId1", 1);  //応援ボタン押したとみなす
   await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
-  await finishedProjectAllowance("toTwId1",1);  //toTwId1の成功した募集中の金額を表示
+  await finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
 
 }
 
@@ -213,11 +212,11 @@ async function projectAllowance( inputToTwId){
 }
 
 //☆期限が来たことを示す仮想ボタンを押したら実行したい。
-async function projectFinish( inputToTwId){
+async function projectFinish( inputToTwId, targetAmount){
   
 
   //スマートコントラクトにJPYCをアプルーブ
-  let tx = await JpycSupportWithSinger.projectFinish( inputToTwId);
+  let tx = await JpycSupportWithSinger.projectFinish( inputToTwId, targetAmount);
   console.log("Finish Project! total Support Amount is");
   console.log( tx);
 
