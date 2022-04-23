@@ -91,7 +91,7 @@ async function myFunctionJPYC(){
   providerSC = await new ethers.providers.Web3Provider(window.ethereum);
 
   //これによりadresses[0]に接続したメタマスクの情報が入るっぽい
-  addresses = await ethereum.request({method: 'eth_requestAccounts'});
+  //addresses = await ethereum.request({method: 'eth_requestAccounts'});
   addressesSC = await ethereum.request({method: 'eth_requestAccounts'});
   
 
@@ -135,6 +135,7 @@ async function myFunctionJPYC(){
 
   
   console.log("myFunctionJPYC End");
+
 }
 
 //☆此処から先を応援するボタンを押したら実行したい。
@@ -163,8 +164,6 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId){
   tx = JpycSupportWithSinger.createProject( inputToTwId, inputFromTwId, addressesSC[0], jpyc1);
   console.log("Create Project!");
 
-
-  console.log("myFunctionJPYC End");
   
 }
 
