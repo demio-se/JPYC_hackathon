@@ -4,7 +4,7 @@ const testSmartContract = "0x173b9E77b0Fa5064028900614F08337acDF887ab"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/23 15:21";
+let time ="22/04/23 17:12";
 
 let provider;
 let providerSC;
@@ -57,25 +57,25 @@ const JpycSupportAbi = [
   "function balanceOf(address) view returns (uint)",
 
   // Send some of your tokens to someone else
-  "function transfer(address to, uint amount) returns(bool)",
+  "function transfer(address to, uint amount)",
 
   // FromからToへtransferFrom.
-  "function transferFrom(address from, address to, uint amount) returns(bool)",
+  "function transferFrom(address from, address to, uint amount)",
 
   // approveできるように定義。
-  "function approve(address spender, uint amount) returns(bool)",
+  //"function approve(address spender, uint amount) returns(bool)",
 
   // allowance確認できるように定義。
-  "function allowance(address owner, address spender) view returns(bool)",
+  //"function allowance(address owner, address spender) view returns(bool)",
 
   //オリジナルの関数をAbiに定義
   "function createProject(string argtoTwID, string argfromTwID, address argfromAddress, uint argamount) payable returns(uint)",
 
   "function projectFinish(string argtoTwID, uint targetAmount) payable returns(uint)",
 
-  "function projectAllowance(string argtoTwID) view returns(bool)",
+  "function projectAllowance(string argtoTwID) view returns(uint)",
 
-  "function finishedProjectAllowance(string argtoTwID) view returns(bool)",
+  "function finishedProjectAllowance(string argtoTwID) view returns(uint)",
 
   "function jpycAmount()",
 
