@@ -88,6 +88,12 @@ const JpycSupportAbi = [
   "event Transfer(address indexed from, address indexed to, uint amount)"
 ];
 
+async function onnectButtonClick(){
+  alert('ボタンクリック');
+
+  await myFunctionJPYC(); //Providerとかの設定
+
+}
 
 async function myFunctionJPYC(){
   console.log(time);
@@ -163,6 +169,7 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId){
   
 }
 
+/*
 window.onload = async function(){
   //myFunction();
   //myFunction2();
@@ -184,6 +191,7 @@ window.onload = async function(){
   //await finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
 
 }
+*/
 
 
 //☆応援中の人の支援総額。使い道ないかも。
