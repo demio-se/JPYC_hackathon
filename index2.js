@@ -88,7 +88,7 @@ const JpycSupportAbi = [
   "event Transfer(address indexed from, address indexed to, uint amount)"
 ];
 
-async function onnectButtonClick(){
+async function connectButtonClick(){
   alert('ボタンクリック');
 
   await myFunctionJPYC(); //Providerとかの設定
