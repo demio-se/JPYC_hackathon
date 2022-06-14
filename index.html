@@ -9,9 +9,25 @@
         type="application/javascript"></script>
 </head>
 <body>
-    <h1>This is JPYC hackathon 0423 1725</h1>
+    <h1>This is JPYC hackathon 0614 2041</h1>
     <script src="./index2.js"></script>
     <p>Metamask接続</p>
-    <input id="button1" type="button" value="Metamask接続" onclick="connectButtonClick()">    
+    <input id="button1" type="button" value="Metamask接続" onclick="connectButtonClick()"> 
+
+    <form>
+        <p>新しいクラウドファンディングの作成</p>
+        <input type="text" id="toTwIdText" name="toTwIdText" required
+            minlength="4" maxlength="15" size="10" pattern="[0-9a-zA-Z_]{4,15}"
+            placeholder="支援したい人のTwitterID">
+        <input type="number" id="targetAmount" name="targetAmount" required
+            min="0" size="10" placeholder="目標金額">
+        <input type="date" id="targetDate" name="targetAmount" required
+            min="2022-06-12"  size="10" placeholder="募集期限">
+        <input type="url" name="url" id="url"
+            placeholder="クラウドファンディング説明ページ"
+            pattern="https://.*" size="30" required>
+        <input type="button" value="新しいクラウドファンディング作成" onClick="clickNewProject()">
+    </form>
+       
 </body>
 </html>

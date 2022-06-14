@@ -4,7 +4,7 @@ const testSmartContract = "0xa89F0f8f91135BD071f4aFAF000010cB8CE75635"; //Rinkeb
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0";
-let time ="22/04/24 0243";
+let time ="22/06/14 2040";
 
 let provider;
 let providerSC;
@@ -137,6 +137,17 @@ async function myFunctionJPYC(){
   console.log("myFunctionJPYC End");
 }
 
+async function clickNewProject(){
+  var toTwIdText = document.getElementById('toTwIdText').value;
+  var targetAmount = document.getElementById('targetAmount').value;
+  var targetDate = document.getElementById('targetDate').value;
+  var url = document.getElementById('url').value;
+  console.log(toTwIdText);
+  console.log(targetAmount);
+  console.log(targetDate);
+  console.log(url);
+
+}
 //☆此処から先を応援するボタンを押したら実行したい。
 async function CreateProject(inputYen, inputToTwId, inputFromTwId){
   
