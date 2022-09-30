@@ -81,7 +81,7 @@ const JpycSupportAbi = [
   //現在スマートコントラクトが所持している金額を表示
   "function jpycAmount() view returns (uint)",
   //応援者の全データを取得
-  //"function getAllProject() view returns (string[])",
+  "function getAllProject() view returns (string[])",
 
   //これだけ関数じゃなくイベント。用途はよくわからない
   // An event triggered whenever anyone transfers to someone else
@@ -204,6 +204,18 @@ window.onload = async function(){
 }
 */
 
+//☆全プロジェクトの一覧表示
+async function getAllProject( ){
+    let tx;
+    let decimalTotal;
+    const JpycSupportContract2 = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
+    
+    console.log("getAllProject start ");
+    tx = await JpycSupportContract2.getAllProject();
+    decimalTotal =ethers.utils.formatUnits(tx, 18);
+    console.log(decimalTotal );
+  
+  }
 
 //☆応援中の人の支援総額。使い道ないかも。
 async function projectAllowance( inputToTwId){
