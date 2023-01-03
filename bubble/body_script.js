@@ -9,12 +9,8 @@ const JPYCAddress = "0x431D5dfF03120AFA4bDf332c61A6e1766eF37BDB"; //GoerliのJPY
 //Github page用なのでBubbleでは不要
 //let time = "22/06/14 2040";
 
-let provider;
 let providerSC;
-
-let addresses;
 let addressesSC;
-let signer;
 let signerSC;
 
 let JpycSupportContract;
@@ -102,16 +98,12 @@ async function myFunctionJPYC() {
 
 
   //ブロックチェーンからデータを持ってきてくれるProviderを生成。
-  provider = await new ethers.providers.Web3Provider(window.ethereum);
   providerSC = await new ethers.providers.Web3Provider(window.ethereum);
 
   //これによりadresses[0]に接続したメタマスクの情報が入るっぽい
-  addresses = await ethereum.request({ method: 'eth_requestAccounts' });
   addressesSC = await ethereum.request({ method: 'eth_requestAccounts' });
 
 
-  //書き込み役singerの設定。メタマスクとの紐付けのことっぽい。
-  signer = await provider.getSigner();
   //書き込み役singerの設定。メタマスクとの紐付けのことっぽい。
   signerSC = await providerSC.getSigner();
 
