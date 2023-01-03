@@ -1,4 +1,3 @@
-const testSpender = "0x62164A66E9673d65Ba3AC3BfabE229a1522fa01d";  //テスト用メタマスクアカウント
 const testSmartContract = "0xa89F0f8f91135BD071f4aFAF000010cB8CE75635"; //Rinkebeyの勝手に応援スマートコントラクト.Rinkeby以外でも動くかも。引数でJPYCのアドレス入れているため
 
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
