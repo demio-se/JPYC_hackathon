@@ -1,12 +1,13 @@
 const testSpender = "0x62164A66E9673d65Ba3AC3BfabE229a1522fa01d";  //テスト用メタマスクアカウント
-const testSmartContract = "0xa89F0f8f91135BD071f4aFAF000010cB8CE75635"; //Rinkebeyの勝手に応援スマートコントラクト
+const testSmartContract = "0xa89F0f8f91135BD071f4aFAF000010cB8CE75635"; //Rinkebeyの勝手に応援スマートコントラクト.Rinkeby以外でも動くかも。引数でJPYCのアドレス入れているため
 
 //JPYCのコントラクトアドレス。テストネット。Rinkebey
 //JPYC Test Net address
 //const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0"; //RinkebyのJPYCアドレスだと思う
 const JPYCAddress = "0x431D5dfF03120AFA4bDf332c61A6e1766eF37BDB"; //GoerliのJPYCアドレス
 
-let time = "22/06/14 2040";
+//Github page用なのでBubbleでは不要
+//let time = "22/06/14 2040";
 
 let provider;
 let providerSC;
@@ -16,7 +17,6 @@ let addressesSC;
 let signer;
 let signerSC;
 
-let JPYCContract;
 let JpycSupportContract;
 
 let JpycSupportWithSinger;
@@ -123,18 +123,15 @@ async function myFunctionJPYC() {
 
 
   // The Contract object
-  const JPYCContract = await new ethers.Contract(JPYCAddress, JPYCAbi, provider);
   const JpycSupportContract = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
 
   //Sendするときに戻り値もらうやつ
   let tx;
 
 
-  //今のコントラクト（JPYCContract）はProviderとつながっているが、Read OnlyなのでSignerとも接続
-  JPYCWithSigner = JPYCContract.connect(signer);
+  //今のコントラクト（JpycSupportContract）はProviderとつながっているが、Read OnlyなのでSignerとも接続
   JpycSupportWithSinger = JpycSupportContract.connect(signerSC);
   console.log("JPYCWithSinger define");
-
 
   console.log("myFunctionJPYC End");
 }
@@ -157,16 +154,8 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId) {
   console.log("Create Projectstart");
   const jpyc1 = ethers.utils.parseUnits(String(inputYen), 18);
   console.log(String(inputYen));
-  //metamaskからtestSpenderに送金。テスト完了したのでコメントアウト
-  /*
-  tx = JPYCWithSigner.transfer(testSpender, jpyc1);
-  console.log("send JPYC by JPYCWithSigner");
-*/
+
   //metamaskのアドレスからtestSpenderにapprove。設定したJPYC使って良いよ
-  /*
-  tx = JPYCWithSigner.approve( testSpender, jpyc1);
-  console.log("approve JPYC by JPYCWithSigner to testSpender");
-*/
   //スマートコントラクトのアドレスにJPYCをアプルーブ
   let tx = await JPYCWithSigner.approve(testSmartContract, jpyc1);
   console.log("approve JPYC by JPYCWithSigner to testSmartContract");
@@ -181,30 +170,6 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId) {
   //console.log( tx);
 
 }
-
-/*
-window.onload = async function(){
-  //myFunction();
-  //myFunction2();
-  await myFunctionJPYC(); //Providerとかの設定
-
-  await CreateProject( 10, "toTwId1", "fromTwId1");  //応援ボタン押したとみなす
-  //スマートコントラクトから情報を取得
-  const JpycSupportContract2 = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
-  let  tx = await JpycSupportContract2.jpycAmount();
-  console.log("jpycAmount is");
-  //console.log( ethers.utils.formatUnits(tx, 18));
-  let decimalTotal =ethers.utils.formatUnits(tx, 18);
-  console.log(decimalTotal );
-
-  
-  await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示
-  //await projectFinish("toTwId1", 0);  //応援ボタン押したとみなす
-  //await projectAllowance("toTwId1");  //toTwId1の募集中の金額を表示。0になるはず
-  //await finishedProjectAllowance("toTwId1");  //toTwId1の成功した募集中の金額を表示
-
-}
-*/
 
 
 //☆応援中の人の支援総額。使い道ないかも。
@@ -245,38 +210,6 @@ async function finishedProjectAllowance(inputToTwId) {
 
   /*document.getElementById("finished").innerHTML
     = `${inputToTwId}が勝手に応援されました!<br>支援総額${decimalTotal}円`;
-*/
+  */
 
 }
-/*  
-  //一応この送り方で送金できた。
-  tx = signer.sendTransaction({
-    to: testSpender,
-    value: ethers.utils.parseEther("0.01")
-  });
-  console.log("const tx = signer.sendTransaction");
-  */
-/*
-//allowanceがうまく動かないのでコメントアウト。
-balance = JPYCWithSigner.allowance(addresses[0], testSpender);
-balanceDecimal = ethers.utils.formatEther(balance);
- 
-
-console.log("allowance balance");
-console.log(balance);
-console.log("allowance balance Decimal");
-console.log(balanceDecimal);
-*/
-
-/*
-  //送金した金額のうち、approveした金額をtransferFromで戻したかったけど、別のアドレスのメタマスクに接続しないと無理な気がする
-  const jpyc01 = ethers.utils.parseUnits("0.1", 18);
-  tx = JPYCWithSigner.transferFrom( addresses[0], testSpender, jpyc01);
-  console.log("approve JPYC by JPYCWithSigner to testSpender");
-*/
-/*  JPYCContract.approve(testSpender, 100);
-
-let allowanceAmount = JPYCContract.approve(testSpender, ethers.utils.parseEther('100'));
-let allowanceAmountDecimal = ethers.utils.formatEther(allowanceAmount);
-console.log(allowanceAmountDecimal);
-*/
