@@ -1,0 +1,5 @@
+2023/01/04 06:40
+test_jpyc?debug_mode=true:333 Uncaught (in promise) ReferenceError: addresses is not defined
+    at myFunctionJPYC (test_jpyc?debug_mode=true:333:15)
+    at async connectButtonClick (test_jpyc?debug_mode=true:313:3)
+

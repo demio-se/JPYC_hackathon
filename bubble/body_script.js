@@ -86,30 +86,30 @@ const JpycSupportAbi = [
 ];
 
 async function connectButtonClick() {
-  alert('ボタンクリック');
 
-  await myFunctionJPYC(); //Providerとかの設定
-
+  await connectMetamask(); //Providerとかの設定
+  alert('connectMetamask 実行');
 }
 
-async function myFunctionJPYC() {
-  console.log(time);
+async function connectMetamask2() {
 
+}
+//ConnectMetamaskFunction
+async function connectMetamask() {
+  console.log('start connectMetamask');
 
-  //ブロックチェーンからデータを持ってきてくれるProviderを生成。
+  //ConnectMetamask
   providerSC = await new ethers.providers.Web3Provider(window.ethereum);
 
   //これによりadresses[0]に接続したメタマスクの情報が入るっぽい
   addressesSC = await ethereum.request({ method: 'eth_requestAccounts' });
-
 
   //書き込み役singerの設定。メタマスクとの紐付けのことっぽい。
   signerSC = await providerSC.getSigner();
 
   //この記載でメタマスクのアドレスと一致していることが確認できた。
   console.log("Wallet address is");
-  console.log(addresses[0]);
-  //alert(addressesSC[0]);
+  console.log(addressesSC[0]);
 
 
 
@@ -124,7 +124,7 @@ async function myFunctionJPYC() {
   JpycSupportWithSinger = JpycSupportContract.connect(signerSC);
   console.log("JPYCWithSinger define");
 
-  console.log("myFunctionJPYC End");
+  console.log("connectMetamask End");
 }
 
 async function clickNewProject() {
