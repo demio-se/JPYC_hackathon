@@ -1,19 +1,14 @@
 const testSmartContract = "0xa89F0f8f91135BD071f4aFAF000010cB8CE75635"; //Rinkebeyの勝手に応援スマートコントラクト.Rinkeby以外でも動くかも。引数でJPYCのアドレス入れているため
 
-//JPYCのコントラクトアドレス。テストネット。Rinkebey
-//JPYC Test Net address
-//const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0"; //RinkebyのJPYCアドレスだと思う
-const JPYCAddress = "0x431D5dfF03120AFA4bDf332c61A6e1766eF37BDB"; //GoerliのJPYCアドレス
+//const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0"; //Rinkeby JPYC Address
+const JPYCAddress = "0x431D5dfF03120AFA4bDf332c61A6e1766eF37BDB"; //GoerliのJPYC Address
 
-//Github page用なのでBubbleでは不要
-//let time = "22/06/14 2040";
-
+//ethers.js member
 let providerSC;
 let addressesSC;
 let signerSC;
 
 let JpycSupportContract;
-
 let JpycSupportWithSinger;
 let JPYCWithSigner;
 
@@ -101,28 +96,22 @@ async function connectMetamask() {
   //ConnectMetamask
   providerSC = await new ethers.providers.Web3Provider(window.ethereum);
 
-  //これによりadresses[0]に接続したメタマスクの情報が入るっぽい
+  //adresses[0] is metamask wallet address
   addressesSC = await ethereum.request({ method: 'eth_requestAccounts' });
-
-  //書き込み役singerの設定。メタマスクとの紐付けのことっぽい。
-  signerSC = await providerSC.getSigner();
-
-  //この記載でメタマスクのアドレスと一致していることが確認できた。
   console.log("Wallet address is");
   console.log(addressesSC[0]);
 
+  //singer is writing role.
+  signerSC = await providerSC.getSigner();
 
-
-  // The Contract object
+  //コントラクトアドレス、ABI、ProviderまたはSignerからContractを作成します。
+  // The Contract object. made from contractAddress,abi, prvider or signer
   const JpycSupportContract = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
-
-  //Sendするときに戻り値もらうやつ
-  let tx;
 
 
   //今のコントラクト（JpycSupportContract）はProviderとつながっているが、Read OnlyなのでSignerとも接続
+  //contract Connect with Signer.
   JpycSupportWithSinger = JpycSupportContract.connect(signerSC);
-  console.log("JPYCWithSinger define");
 
   console.log("connectMetamask End");
 }
