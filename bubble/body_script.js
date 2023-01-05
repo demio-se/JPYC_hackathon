@@ -4,9 +4,9 @@ const testSmartContract = "0xa89F0f8f91135BD071f4aFAF000010cB8CE75635"; //Rinkeb
 const JPYCAddress = "0x431D5dfF03120AFA4bDf332c61A6e1766eF37BDB"; //GoerliのJPYC Address
 
 //ethers.js member
-let providerSC;
-let addressesSC;
-let signerSC;
+let provider;
+let addresses;
+let signer;
 
 let JpycSupportContract;
 let JpycSupportWithSinger;
@@ -83,7 +83,7 @@ const JpycSupportAbi = [
 async function connectButtonClick() {
 
   await connectMetamask(); //Providerとかの設定
-  alert('connectMetamask 実行');
+  //alert('connectMetamask 実行');
 }
 
 async function connectMetamask2() {
@@ -94,28 +94,31 @@ async function connectMetamask() {
   console.log('start connectMetamask');
 
   //ConnectMetamask
-  providerSC = await new ethers.providers.Web3Provider(window.ethereum);
+  provider = await new ethers.providers.Web3Provider(window.ethereum);
 
   //adresses[0] is metamask wallet address
-  addressesSC = await ethereum.request({ method: 'eth_requestAccounts' });
+  addresses = await ethereum.request({ method: 'eth_requestAccounts' });
   console.log("Wallet address is");
-  console.log(addressesSC[0]);
+  console.log(addresses[0]);
 
   //singer is writing role.
-  signerSC = await providerSC.getSigner();
+  signer = await provider.getSigner();
 
   //コントラクトアドレス、ABI、ProviderまたはSignerからContractを作成します。
   // The Contract object. made from contractAddress,abi, prvider or signer
-  const JpycSupportContract = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
+  const JpycSupportContract = await new ethers.Contract(testSmartContract, JpycSupportAbi, provider);
 
 
   //今のコントラクト（JpycSupportContract）はProviderとつながっているが、Read OnlyなのでSignerとも接続
   //contract Connect with Signer.
-  JpycSupportWithSinger = JpycSupportContract.connect(signerSC);
+  JpycSupportWithSinger = JpycSupportContract.connect(signer);
 
   console.log("connectMetamask End");
+  alert('connectMetamask End');
 }
 
+//クラウドファンディングプロジェクトの新規作成
+//create new crowd funding project
 async function clickNewProject() {
   var toTwIdText = document.getElementById('toTwIdText').value;
   var targetAmount = document.getElementById('targetAmount').value;
@@ -127,6 +130,7 @@ async function clickNewProject() {
   console.log(url);
 
 }
+
 //☆此処から先を応援するボタンを押したら実行したい。
 async function CreateProject(inputYen, inputToTwId, inputFromTwId) {
 
@@ -141,8 +145,8 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId) {
   console.log("approve JPYC by JPYCWithSigner to testSmartContract");
 
   //スマートコントラクトのCreateProject関数を実行
-  //tx = await JpycSupportWithSinger.createProject( inputToTwId, inputFromTwId, addressesSC[0], jpyc1);
-  await JpycSupportWithSinger.createProject(inputToTwId, inputFromTwId, addressesSC[0], jpyc1);
+  //tx = await JpycSupportWithSinger.createProject( inputToTwId, inputFromTwId, addresses[0], jpyc1);
+  await JpycSupportWithSinger.createProject(inputToTwId, inputFromTwId, addresses[0], jpyc1);
   console.log("Create Project!");
 
   //console.log("jpycAmount()");
@@ -156,7 +160,7 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId) {
 async function projectAllowance(inputToTwId) {
   let tx;
   let decimalTotal;
-  const JpycSupportContract2 = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
+  const JpycSupportContract2 = await new ethers.Contract(testSmartContract, JpycSupportAbi, provider);
 
   console.log("projectAllowance is ");
   tx = await JpycSupportContract2.projectAllowance(inputToTwId);
@@ -181,7 +185,7 @@ async function finishedProjectAllowance(inputToTwId) {
 
   let tx;
   let decimalTotal;
-  const JpycSupportContract2 = await new ethers.Contract(testSmartContract, JpycSupportAbi, providerSC);
+  const JpycSupportContract2 = await new ethers.Contract(testSmartContract, JpycSupportAbi, provider);
   console.log("finishedProjectAllowance");
   tx = await JpycSupportContract2.finishedProjectAllowance(inputToTwId);
   decimalTotal = ethers.utils.formatUnits(tx, 18);
