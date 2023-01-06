@@ -64,8 +64,9 @@ contract JpycSupport {
 
     //構造体で支援先、支援者の情報をまとめる
     struct Project {
-        string toTwID; //支援される人。お金受け取る人
-        string fromTwID; //支援する人。お金送る人
+        string identifier; //Cloudfounding identifier
+        string toTwID; //People to be supported. People who receive money.
+        string fromTwID; //People to support. People who send money.
         address fromAddress; //支援する人のウォレットアドレス
         uint256 amount; //支援額。allowanceで取れるので、要らないかも？と思ったけど送金してもらうことになったので必要
         bool isFinish; //プロジェクトの終了。trueなら終了
