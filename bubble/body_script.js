@@ -10,8 +10,7 @@ let signer;
 
 //for original smart contract
 let JpycSupportContract;
-let JpycSupportWithSinger;
-let JPYCWithSigner;
+let JpycSupportSinger;
 
 //これはこの中に描いた関数を外から呼び出せるようになるおまじない。
 // The ERC-20 Contract ABI, which is a common contract interface
@@ -109,7 +108,7 @@ async function connectMetamask() {
 
   //今のコントラクト（JpycSupportContract）はProviderとつながっているが、Read OnlyなのでSignerとも接続
   //contract Connect with Signer.
-  JpycSupportWithSinger = JpycSupportContract.connect(signer);
+  JpycSupportSinger = JpycSupportContract.connect(signer);
 
   console.log("connectMetamask End");
   alert('connectMetamask End');
@@ -129,16 +128,16 @@ async function CreateProject(inputYen, inputToTwId, inputFromTwId) {
 
   //metamaskのアドレスからtestSpenderにapprove。設定したJPYC使って良いよ
   //スマートコントラクトのアドレスにJPYCをアプルーブ
-  let tx = await JpycSupportWithSinger.approve(testSmartContract, jpyc1);
-  console.log("approve JPYC by JPYCWithSigner to testSmartContract");
+  let tx = await JpycSupportSinger.approve(testSmartContract, jpyc1);
+  console.log("approve JPYC by JpycSupportSinger to testSmartContract");
 
   //スマートコントラクトのCreateProject関数を実行
-  //tx = await JpycSupportWithSinger.createProject( inputToTwId, inputFromTwId, addresses[0], jpyc1);
-  await JpycSupportWithSinger.createProject(inputToTwId, inputFromTwId, addresses[0], jpyc1);
+  //tx = await JpycSupportSinger.createProject( inputToTwId, inputFromTwId, addresses[0], jpyc1);
+  await JpycSupportSinger.createProject(inputToTwId, inputFromTwId, addresses[0], jpyc1);
   console.log("Create Project!");
 
   //console.log("jpycAmount()");
-  //tx = await JpycSupportWithSinger.jpycAmount();
+  //tx = await JpycSupportSinger.jpycAmount();
   //console.log( tx);
 
 }
@@ -161,7 +160,7 @@ async function projectAllowance(inputToTwId) {
 async function projectFinish(inputToTwId, targetAmount) {
 
   //期限が来たので、プロジェクト終了をスマートコントラクトに通知
-  let tx = await JpycSupportWithSinger.projectFinish(inputToTwId, targetAmount);
+  let tx = await JpycSupportSinger.projectFinish(inputToTwId, targetAmount);
   console.log("Finish Project!");
   //console.log( tx);
 
