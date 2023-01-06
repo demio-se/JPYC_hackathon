@@ -3,11 +3,12 @@ const testSmartContract = "0xa89F0f8f91135BD071f4aFAF000010cB8CE75635"; //Rinkeb
 //const JPYCAddress = "0xbD9c419003A36F187DAf1273FCe184e1341362C0"; //Rinkeby JPYC Address
 const JPYCAddress = "0x431D5dfF03120AFA4bDf332c61A6e1766eF37BDB"; //GoerliのJPYC Address
 
-//ethers.js member
+//ethers.js member. for metamask
 let provider;
 let addresses;
 let signer;
 
+//for original smart contract
 let JpycSupportContract;
 let JpycSupportWithSinger;
 let JPYCWithSigner;
@@ -86,9 +87,6 @@ async function connectButtonClick() {
   //alert('connectMetamask 実行');
 }
 
-async function connectMetamask2() {
-
-}
 //ConnectMetamaskFunction
 async function connectMetamask() {
   console.log('start connectMetamask');
@@ -117,31 +115,21 @@ async function connectMetamask() {
   alert('connectMetamask End');
 }
 
-//クラウドファンディングプロジェクトの新規作成
-//create new crowd funding project
-async function clickNewProject() {
-  var toTwIdText = document.getElementById('toTwIdText').value;
-  var targetAmount = document.getElementById('targetAmount').value;
-  var targetDate = document.getElementById('targetDate').value;
-  var url = document.getElementById('url').value;
-  console.log(toTwIdText);
-  console.log(targetAmount);
-  console.log(targetDate);
-  console.log(url);
 
-}
 
 //☆此処から先を応援するボタンを押したら実行したい。
+//CreateProject
 async function CreateProject(inputYen, inputToTwId, inputFromTwId) {
 
-
   console.log("Create Projectstart");
+
+  //金額を変換
   const jpyc1 = ethers.utils.parseUnits(String(inputYen), 18);
   console.log(String(inputYen));
 
   //metamaskのアドレスからtestSpenderにapprove。設定したJPYC使って良いよ
   //スマートコントラクトのアドレスにJPYCをアプルーブ
-  let tx = await JPYCWithSigner.approve(testSmartContract, jpyc1);
+  let tx = await JpycSupportWithSinger.approve(testSmartContract, jpyc1);
   console.log("approve JPYC by JPYCWithSigner to testSmartContract");
 
   //スマートコントラクトのCreateProject関数を実行
@@ -195,5 +183,19 @@ async function finishedProjectAllowance(inputToTwId) {
   /*document.getElementById("finished").innerHTML
     = `${inputToTwId}が勝手に応援されました!<br>支援総額${decimalTotal}円`;
   */
+
+}
+
+//作りかけ。クラウドファンディングプロジェクトの新規作成
+//create new crowd funding project
+async function clickNewProject() {
+  var toTwIdText = document.getElementById('toTwIdText').value;
+  var targetAmount = document.getElementById('targetAmount').value;
+  var targetDate = document.getElementById('targetDate').value;
+  var url = document.getElementById('url').value;
+  console.log(toTwIdText);
+  console.log(targetAmount);
+  console.log(targetDate);
+  console.log(url);
 
 }
