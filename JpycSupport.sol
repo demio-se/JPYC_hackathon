@@ -64,7 +64,6 @@ contract JpycSupport {
 
     //構造体で支援先、支援者の情報をまとめる
     struct Project {
-        string identifier; //Cloudfounding identifier
         string toTwID; //People to be supported. People who receive money.
         string fromTwID; //People to support. People who send money.
         address fromAddress; //支援する人のウォレットアドレス
@@ -72,10 +71,44 @@ contract JpycSupport {
         bool isFinish; //プロジェクトの終了。trueなら終了
     }
 
+    //クラウドファンディング情報の構造体
+    struct crowdFandingInfo {
+        string identifier; //Cloudfounding identifier
+        address founderWalletAddress;
+    }
+
+    //寄付情報の構造体.更新はしないで追加と参照だけ。日時やfromTwIDはWebサイトで保持
+    struct donationInfo {
+        string identifier; //Cloudfounding identifier
+        address fromAddress; //people to support's wallet.支援する人のウォレットアドレス
+        uint256 amount; //支援額。allowanceで取れるので、要らないかも？と思ったけど送金してもらうことになったので必要
+    }
+
+    //構造体の配列でクラウドファンディング情報と寄附情報を管理
+    crowdFandingInfo[] public crowdFandingInfos;
+    donationInfo[] public donationInfos;
+
     Project[] public allProjects;
 
-    //構造体Projectを放り込むmapping projectsの宣言
-    //mapping (uint256 => Project) public projects;
+    /// @title createCrowdFanding
+    /// @author demio_se
+    /// @notice create crowd fanding. push to crowdFandingInfos when argIdentifier is unique.
+    /// @dev 
+    function createCrowdFanding(
+        string memory argIdentifier; //Cloudfounding identifier
+        address argFounderWalletAddress;
+    ) external payable {
+        for (uint256 i = 0; i < crowdFandingInfos.length; i++) {
+            if (keccak256(abi.encodePacked(crowdFandingInfos[i].identifier)) ==
+                keccak256(abi.encodePacked(argIdentifier)) &&)
+                {
+                    return; //☆エラーで返したい。how？
+                }
+        
+        }
+
+
+    }
 
     //引数をプッシュする。ガス発生
     function createProject(
